@@ -122,6 +122,7 @@ const Modal = React.forwardRef(function Modal(inProps, ref) {
           ...(!isHostComponent(RootSlot) && { as: component, theme }),
         }),
         backdrop: () => ({
+          'aria-hidden': true,
           ...BackdropProps,
           ...resolveComponentProps(backdropSlotProps, ownerState),
         }),
