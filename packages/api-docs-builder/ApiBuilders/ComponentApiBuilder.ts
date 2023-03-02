@@ -393,7 +393,7 @@ Page.getInitialProps = () => {
   const req = require.context(
     '${translationPagesDirectory}/${kebabCase(reactApi.name)}',
     false,
-    /${kebabCase(reactApi.name)}.*.json$/,
+    /\\.\\/${kebabCase(reactApi.name)}.*.json$/,
   );
   const descriptions = mapApiPageTranslations(req);
 
