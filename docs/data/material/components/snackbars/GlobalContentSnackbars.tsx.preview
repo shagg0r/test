@@ -1,0 +1,8 @@
+<SnackbarsProvider
+  ref={snackbarRef}
+  autoHideDuration={4000}
+  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+  content={GlobalContentSnackbar(snackbarRef)}
+>
+  <MyApp />
+</SnackbarsProvider>
