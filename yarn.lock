@@ -13656,13 +13656,13 @@ react-docgen@^5.4.3:
     node-dir "^0.1.10"
     strip-indent "^3.0.0"
 
-react-dom@^18.2.0:
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
-  integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
+react-dom@18.3.0-next-39a3b72c6-20230414, react-dom@^18.2.0:
+  version "18.3.0-next-39a3b72c6-20230414"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.3.0-next-39a3b72c6-20230414.tgz#73851f0f7134b7105bbd70f19291561fe44e404c"
+  integrity sha512-EvYOPBV0tJ/HGunfadbEl+F1hR7P0LXdlQ9ksfDsQzta0JYc+XX8mEor9vRVhFR8TlEdRDISlSu2u16TIO+VhQ==
   dependencies:
     loose-envify "^1.1.0"
-    scheduler "^0.23.0"
+    scheduler "0.24.0-next-39a3b72c6-20230414"
 
 react-draggable@^4.4.5:
   version "4.4.5"
@@ -13706,7 +13706,7 @@ react-intersection-observer@^9.4.3:
   resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.4.3.tgz#ec84ce0c25cad548075130ea045ac5c7adf908f3"
   integrity sha512-WNRqMQvKpupr6MzecAQI0Pj0+JQong307knLP4g/nBex7kYfIaZsPpXaIhKHR+oV8z+goUbH9e10j6lGRnTzlQ==
 
-react-is@^16.10.2, "react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^16.13.1, react-is@^16.7.0, react-is@^17.0.1, react-is@^18.0.0, react-is@^18.2.0:
+react-is@18.3.0-next-39a3b72c6-20230414, react-is@^16.10.2, "react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^16.13.1, react-is@^16.7.0, react-is@^17.0.1, react-is@^18.0.0, react-is@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
@@ -13841,14 +13841,14 @@ react-swipeable-views@^0.14.0:
     react-swipeable-views-utils "^0.14.0"
     warning "^4.0.1"
 
-react-test-renderer@^18.0.0, react-test-renderer@^18.2.0:
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-18.2.0.tgz#1dd912bd908ff26da5b9fca4fd1c489b9523d37e"
-  integrity sha512-JWD+aQ0lh2gvh4NM3bBM42Kx+XybOxCpgYK7F8ugAlpaTSnWsX+39Z4XkOykGZAHrjwwTZT3x3KxswVWxHPUqA==
+react-test-renderer@18.3.0-next-39a3b72c6-20230414, react-test-renderer@^18.0.0, react-test-renderer@^18.2.0:
+  version "18.3.0-next-39a3b72c6-20230414"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-18.3.0-next-39a3b72c6-20230414.tgz#8e0da6b8481ecd3b15ea1e8ac707ce7019e917c8"
+  integrity sha512-UHkbTwSvScQb1EsNb3IV3+SDlaHoPVzeiEP9WU74EMFCCMt5QF36S07Q7Za+5Fvj6cA3TH0uYRtUDK2f0SDj+Q==
   dependencies:
-    react-is "^18.2.0"
+    react-is "18.3.0-next-39a3b72c6-20230414"
     react-shallow-renderer "^16.15.0"
-    scheduler "^0.23.0"
+    scheduler "0.24.0-next-39a3b72c6-20230414"
 
 react-transition-group@2.9.0:
   version "2.9.0"
@@ -13883,10 +13883,10 @@ react-window@^1.8.9:
     "@babel/runtime" "^7.0.0"
     memoize-one ">=3.1.1 <6"
 
-react@^18.2.0:
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
-  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
+react@18.3.0-next-39a3b72c6-20230414, react@^18.2.0:
+  version "18.3.0-next-39a3b72c6-20230414"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.3.0-next-39a3b72c6-20230414.tgz#509c20e80887abe3bb5ce2fe99aedb8aa18429c9"
+  integrity sha512-7lAq8yabg268nJlT6U95sG3ed6AmDcO+0SXOcKdPclItXgSklk8nRMw2vY7yx552hY+p2Odw+DusnWvqfWcNEA==
   dependencies:
     loose-envify "^1.1.0"
 
@@ -14634,10 +14634,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.23.0.tgz#ba8041afc3d30eb206a487b6b384002e4e61fdfe"
-  integrity sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==
+scheduler@0.24.0-next-39a3b72c6-20230414, scheduler@^0.23.0:
+  version "0.24.0-next-39a3b72c6-20230414"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.24.0-next-39a3b72c6-20230414.tgz#96693b41e7f2cdd18a114d7c419cf416e5d7d037"
+  integrity sha512-UvG14yKTH146Ygr94EBfjtpB4BJoWNgEWTeerMaB3KHDEO3yEeh8By7Aj27Gmy7u+AeZSin3zeAWO7sxnEOrEA==
   dependencies:
     loose-envify "^1.1.0"
 
