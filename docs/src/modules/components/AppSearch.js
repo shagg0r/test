@@ -201,7 +201,22 @@ DocSearchHit.propTypes = {
   hit: PropTypes.object.isRequired,
 };
 
-export default function AppSearch() {
+/* This is JS file , For TS, use below */
+// interface AppSearchProps {
+//   isOpen?: boolean;
+//   initialQuery?: string;
+// }
+// export default function AppSearch(props: AppSearchProps) {
+
+/**
+ * App Search Popup Component
+ * @param {{defaultQuery:string=,defaultOpen:boolean=}|{}} props
+ */
+export default function AppSearch(props) {
+  AppSearch.propTypes = {
+    defaultOpen: PropTypes.bool,
+    defaultQuery: PropTypes.string,
+  };
   useLazyCSS(
     'https://cdn.jsdelivr.net/npm/@docsearch/css@3.0.0-alpha.40/dist/style.min.css',
     '#app-search',
@@ -210,8 +225,8 @@ export default function AppSearch() {
   const t = useTranslate();
   const userLanguage = useUserLanguage();
   const searchButtonRef = React.useRef(null);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [initialQuery, setInitialQuery] = React.useState(undefined);
+  const [isOpen, setIsOpen] = React.useState(props.defaultOpen ?? false);
+  const [initialQuery, setInitialQuery] = React.useState(props.defaultQuery ?? undefined);
   const facetFilterLanguage =
     LANGUAGES_SSR.indexOf(userLanguage) !== -1 ? `language:${userLanguage}` : `language:en`;
   const macOS = window.navigator.platform.toUpperCase().indexOf('MAC') >= 0;
@@ -256,8 +271,8 @@ export default function AppSearch() {
   React.useEffect(() => {
     const addStartScreen = () => {
       const dropDown = document.querySelector('.DocSearch-Dropdown');
-      const isExisting = document.querySelector('.DocSearch-NewStartScreen');
-      if (dropDown && !isExisting) {
+      const newStartScreen = document.querySelector('.DocSearch-NewStartScreen');
+      if (dropDown && !newStartScreen) {
         dropDown.insertAdjacentHTML(
           'beforeend',
           ReactDOMServer.renderToStaticMarkup(<NewStartScreen />),
@@ -271,6 +286,12 @@ export default function AppSearch() {
       if (modal) {
         modal.style.opacity = 1;
         addStartScreen();
+        // Next `if` block is only needed for the temporary "/search" page.
+        // When users search with URL, don't show the `NewStartScreen`.
+        if (isOpen && props.defaultQuery !== '') {
+          // TODO: This might cause a rendering flicker. Yet we do need a "NewStartScreen"
+          document.querySelector('.DocSearch-NewStartScreen').style.display = 'none';
+        }
       }
       if (searchInput) {
         const handleInput = (event) => {
@@ -286,7 +307,7 @@ export default function AppSearch() {
       }
     }
     return () => {};
-  }, [isOpen]);
+  }, [isOpen, props.defaultQuery]);
 
   const search = `${t('algoliaSearch')}…`;
 

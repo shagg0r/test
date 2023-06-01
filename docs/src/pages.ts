@@ -4,6 +4,11 @@ import standardNavIcons from 'docs/src/modules/components/AppNavIcons';
 
 const pages: readonly MuiPage[] = [
   {
+    title: 'Search',
+    pathname: '/search',
+    icon: 'SearchIcon',
+  },
+  {
     pathname: '/getting-started',
     icon: standardNavIcons.DescriptionIcon,
     children: [
