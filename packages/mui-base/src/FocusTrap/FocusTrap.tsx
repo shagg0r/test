@@ -86,6 +86,28 @@ function isNodeMatchingSelectorFocusable(node: HTMLInputElement): boolean {
   return true;
 }
 
+function getOpenFocus(root: HTMLElement): HTMLElement {
+  if (root.getAttribute("tabindex") === "-1") {
+    return root;
+  }
+
+  let resultNode: HTMLElement | null = null;
+  root.querySelectorAll("[tabindex]").forEach((node) => {
+    const nodeTabIndex = getTabIndex(node as HTMLElement);
+    if (nodeTabIndex !== -1) {
+      return;
+    }
+
+    if (resultNode !== null) {
+      return;
+    }
+
+    resultNode = node as HTMLElement;
+  });
+
+  return resultNode ?? root;
+}
+
 function defaultGetTabbable(root: HTMLElement): HTMLElement[] {
   const regularTabNodes: HTMLElement[] = [];
   const orderedTabNodes: OrderedTabNode[] = [];
@@ -171,9 +193,10 @@ function FocusTrap(props: FocusTrapProps): JSX.Element {
     }
 
     const doc = ownerDocument(rootRef.current);
+    const openFocusElement = getOpenFocus(rootRef.current);
 
     if (!rootRef.current.contains(doc.activeElement)) {
-      if (!rootRef.current.hasAttribute('tabIndex')) {
+      if (!openFocusElement.hasAttribute('tabIndex')) {
         if (process.env.NODE_ENV !== 'production') {
           console.error(
             [
@@ -183,11 +206,11 @@ function FocusTrap(props: FocusTrapProps): JSX.Element {
             ].join('\n'),
           );
         }
-        rootRef.current.setAttribute('tabIndex', '-1');
+        openFocusElement.setAttribute('tabIndex', "-1");
       }
 
       if (activated.current) {
-        rootRef.current.focus();
+        openFocusElement.focus();
       }
     }
 

@@ -246,9 +246,6 @@ const Modal = React.forwardRef(function Modal<RootComponentType extends React.El
     onExited?: () => void;
     tabIndex?: string;
   } = {};
-  if (children.props.tabIndex === undefined) {
-    childProps.tabIndex = '-1';
-  }
 
   // It's a Transition like component
   if (hasTransition) {
