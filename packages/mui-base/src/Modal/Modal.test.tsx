@@ -18,7 +18,7 @@ describe('<Modal />', () => {
 
   describeConformanceUnstyled(
     <Modal open>
-      <div />
+      <div tabIndex={-1} />
     </Modal>,
     () => ({
       inheritComponent: 'div',
@@ -50,7 +50,7 @@ describe('<Modal />', () => {
 
     render(
       <Modal open slots={{ root: Root }}>
-        <div />
+        <div tabIndex={-1} />
       </Modal>,
     );
 
@@ -67,7 +67,7 @@ describe('<Modal />', () => {
         }}
         ref={elementRef}
       >
-        <div />
+        <div tabIndex={-1} />
       </Modal>,
     );
 
@@ -82,7 +82,7 @@ describe('<Modal />', () => {
     // so test that
     render(
       <Modal open ref={elementRef} keepMounted data-testid="modal">
-        <div />
+        <div tabIndex={-1} />
       </Modal>,
     );
 
@@ -96,7 +96,7 @@ describe('<Modal />', () => {
     // so test that
     render(
       <Modal open={false} ref={elementRef} keepMounted data-testid="modal">
-        <div />
+        <div tabIndex={-1} />
       </Modal>,
     );
 
@@ -110,7 +110,7 @@ describe('<Modal />', () => {
     // so test the inverses of that
     render(
       <Modal open aria-hidden ref={elementRef} keepMounted data-testid="modal">
-        <div />
+        <div tabIndex={-1} />
       </Modal>,
     );
 
@@ -124,7 +124,7 @@ describe('<Modal />', () => {
     // so test the inverses of that
     render(
       <Modal open={false} aria-hidden={false} ref={elementRef} keepMounted data-testid="modal">
-        <div />
+        <div tabIndex={-1} />
       </Modal>,
     );
 

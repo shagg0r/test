@@ -385,7 +385,6 @@ const Popover = React.forwardRef(function Popover(inProps, ref) {
     },
     ownerState,
     className: clsx(classes.paper, externalPaperSlotProps?.className),
-    tabIndex: -1,
   });
 
   const { slotProps: rootSlotPropsProp, ...rootProps } = useSlotProps({
@@ -412,7 +411,9 @@ const Popover = React.forwardRef(function Popover(inProps, ref) {
         timeout={transitionDuration}
         {...TransitionProps}
       >
-        <PaperSlot {...paperProps}>{children}</PaperSlot>
+        <PaperSlot tabIndex={-1} {...paperProps}>
+          {children}
+        </PaperSlot>
       </TransitionComponent>
     </RootSlot>
   );

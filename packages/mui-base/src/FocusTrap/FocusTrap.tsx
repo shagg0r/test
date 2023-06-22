@@ -194,11 +194,11 @@ function FocusTrap(props: FocusTrapProps): JSX.Element {
 
     if (!rootRef.current.contains(doc.activeElement)) {
       // No focusable child was found and rootRef.current cannot be focused
-      if (!openFocusElement.hasAttribute('tabIndex') && rootRef.current === openFocusElement) {
+      if (rootRef.current === openFocusElement && !openFocusElement.hasAttribute('tabIndex')) {
         if (process.env.NODE_ENV !== 'production') {
           console.error(
             [
-              'MUI: The modal content node does not accept focus.',
+              'MUI: The modal content node does not have focusable elements.',
               'For the benefit of assistive technologies, ' +
                 'the tabIndex of the node is being set to "-1".',
             ].join('\n'),
