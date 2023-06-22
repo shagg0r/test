@@ -89,14 +89,21 @@ function isNodeMatchingSelectorFocusable(node: HTMLInputElement): boolean {
 function defaultGetTabbable(
   root: HTMLElement,
   allowExplicitMinus1: boolean = false,
+  allowRootFocus: boolean = false,
 ): HTMLElement[] {
   const regularTabNodes: HTMLElement[] = [];
   const orderedTabNodes: OrderedTabNode[] = [];
 
-  Array.from(root.querySelectorAll(candidatesSelector)).forEach((node, i) => {
+  const focusableNodes = Array.from(root.querySelectorAll(candidatesSelector));
+
+  if (allowRootFocus) {
+    focusableNodes.unshift(root);
+  }
+
+  focusableNodes.forEach((node, i) => {
     const nodeTabIndex = getTabIndex(node as HTMLElement);
 
-    if (node.getAttribute('tabindex') === '-1' && allowExplicitMinus1) {
+    if (allowExplicitMinus1 && node.getAttribute('tabindex') === '-1') {
       orderedTabNodes.push({
         documentOrder: i,
         tabIndex: nodeTabIndex,
@@ -183,10 +190,11 @@ function FocusTrap(props: FocusTrapProps): JSX.Element {
     }
 
     const doc = ownerDocument(rootRef.current);
-    const openFocusElement = defaultGetTabbable(rootRef.current, true)[0] ?? rootRef.current;
+    const openFocusElement = defaultGetTabbable(rootRef.current, true, true)[0] ?? rootRef.current;
 
     if (!rootRef.current.contains(doc.activeElement)) {
-      if (!openFocusElement.hasAttribute('tabIndex')) {
+      // No focusable child was found and rootRef.current cannot be focused
+      if (!openFocusElement.hasAttribute('tabIndex') && rootRef.current === openFocusElement) {
         if (process.env.NODE_ENV !== 'production') {
           console.error(
             [
