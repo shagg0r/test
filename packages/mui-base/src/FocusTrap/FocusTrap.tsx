@@ -86,34 +86,21 @@ function isNodeMatchingSelectorFocusable(node: HTMLInputElement): boolean {
   return true;
 }
 
-function getOpenFocus(root: HTMLElement): HTMLElement {
-  if (root.getAttribute("tabindex") === "-1") {
-    return root;
-  }
-
-  let resultNode: HTMLElement | null = null;
-  root.querySelectorAll("[tabindex]").forEach((node) => {
-    const nodeTabIndex = getTabIndex(node as HTMLElement);
-    if (nodeTabIndex !== -1) {
-      return;
-    }
-
-    if (resultNode !== null) {
-      return;
-    }
-
-    resultNode = node as HTMLElement;
-  });
-
-  return resultNode ?? root;
-}
-
-function defaultGetTabbable(root: HTMLElement): HTMLElement[] {
+function defaultGetTabbable(root: HTMLElement, allowExplicitMinus1: boolean = false): HTMLElement[] {
   const regularTabNodes: HTMLElement[] = [];
   const orderedTabNodes: OrderedTabNode[] = [];
 
   Array.from(root.querySelectorAll(candidatesSelector)).forEach((node, i) => {
     const nodeTabIndex = getTabIndex(node as HTMLElement);
+
+    if (node.getAttribute("tabindex") === "-1" && allowExplicitMinus1) {
+      orderedTabNodes.push({
+        documentOrder: i,
+        tabIndex: nodeTabIndex,
+        node: node as HTMLElement,
+      });
+      return;
+    }
 
     if (nodeTabIndex === -1 || !isNodeMatchingSelectorFocusable(node as HTMLInputElement)) {
       return;
@@ -193,7 +180,7 @@ function FocusTrap(props: FocusTrapProps): JSX.Element {
     }
 
     const doc = ownerDocument(rootRef.current);
-    const openFocusElement = getOpenFocus(rootRef.current);
+    const openFocusElement = defaultGetTabbable(rootRef.current, true)[0] ?? rootRef.current;
 
     if (!rootRef.current.contains(doc.activeElement)) {
       if (!openFocusElement.hasAttribute('tabIndex')) {

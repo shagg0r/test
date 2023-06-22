@@ -177,6 +177,7 @@ const Dialog = React.forwardRef(function Dialog(inProps, ref) {
     children,
     className,
     disableEscapeKeyDown = false,
+    disableInitialContentFocus = false,
     fullScreen = false,
     fullWidth = false,
     maxWidth = 'sm',
@@ -269,7 +270,7 @@ const Dialog = React.forwardRef(function Dialog(inProps, ref) {
             as={PaperComponent}
             elevation={24}
             role="dialog"
-            tabIndex={-1}
+            tabIndex={disableInitialContentFocus ? undefined : -1}
             aria-describedby={ariaDescribedby}
             aria-labelledby={ariaLabelledby}
             {...PaperProps}
@@ -333,6 +334,16 @@ Dialog.propTypes /* remove-proptypes */ = {
    * @default false
    */
   disableEscapeKeyDown: PropTypes.bool,
+  /**
+   * By default the dialog content element is focused when opened.
+   *
+   * Set the property to `true` to disable this behavior and focus will be
+   * placed on the first focusable element respecting `tabIndex` order,
+   * including elements explicitly marked with `tabIndex={-1}`.
+   *
+   * @default false
+   */
+  disableInitialContentFocus: PropTypes.bool,
   /**
    * If `true`, the dialog is full-screen.
    * @default false
