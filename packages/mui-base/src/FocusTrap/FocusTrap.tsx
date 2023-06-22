@@ -86,14 +86,17 @@ function isNodeMatchingSelectorFocusable(node: HTMLInputElement): boolean {
   return true;
 }
 
-function defaultGetTabbable(root: HTMLElement, allowExplicitMinus1: boolean = false): HTMLElement[] {
+function defaultGetTabbable(
+  root: HTMLElement,
+  allowExplicitMinus1: boolean = false,
+): HTMLElement[] {
   const regularTabNodes: HTMLElement[] = [];
   const orderedTabNodes: OrderedTabNode[] = [];
 
   Array.from(root.querySelectorAll(candidatesSelector)).forEach((node, i) => {
     const nodeTabIndex = getTabIndex(node as HTMLElement);
 
-    if (node.getAttribute("tabindex") === "-1" && allowExplicitMinus1) {
+    if (node.getAttribute('tabindex') === '-1' && allowExplicitMinus1) {
       orderedTabNodes.push({
         documentOrder: i,
         tabIndex: nodeTabIndex,
@@ -193,7 +196,7 @@ function FocusTrap(props: FocusTrapProps): JSX.Element {
             ].join('\n'),
           );
         }
-        openFocusElement.setAttribute('tabIndex', "-1");
+        openFocusElement.setAttribute('tabIndex', '-1');
       }
 
       if (activated.current) {
