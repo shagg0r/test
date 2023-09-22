@@ -1,12 +1,8 @@
 const path = require('path');
+const getMuiAliases = require('./scripts/muiAliases');
 
 const errorCodesPath = path.resolve(__dirname, './docs/public/static/error-codes.json');
 const missingError = process.env.MUI_EXTRACT_ERROR_CODES === 'true' ? 'write' : 'annotate';
-
-function resolveAliasPath(relativeToBabelConf) {
-  const resolvedPath = path.relative(process.cwd(), path.resolve(__dirname, relativeToBabelConf));
-  return `./${resolvedPath.replace('\\', '/')}`;
-}
 
 const productionPlugins = [
   ['babel-plugin-react-remove-properties', { properties: ['data-mui-test'] }],
@@ -14,25 +10,7 @@ const productionPlugins = [
 
 module.exports = function getBabelConfig(api) {
   const useESModules = api.env(['regressions', 'legacy', 'modern', 'stable', 'rollup']);
-
-  const defaultAlias = {
-    '@mui/material': resolveAliasPath('./packages/mui-material/src'),
-    '@mui/docs': resolveAliasPath('./packages/mui-docs/src'),
-    '@mui/icons-material': resolveAliasPath(
-      `./packages/mui-icons-material/lib${useESModules ? '/esm' : ''}`,
-    ),
-    '@mui/lab': resolveAliasPath('./packages/mui-lab/src'),
-    '@mui/markdown': resolveAliasPath('./packages/markdown'),
-    '@mui/styled-engine': resolveAliasPath('./packages/mui-styled-engine/src'),
-    '@mui/styled-engine-sc': resolveAliasPath('./packages/mui-styled-engine-sc/src'),
-    '@mui/styles': resolveAliasPath('./packages/mui-styles/src'),
-    '@mui/system': resolveAliasPath('./packages/mui-system/src'),
-    '@mui/private-theming': resolveAliasPath('./packages/mui-private-theming/src'),
-    '@mui/base': resolveAliasPath('./packages/mui-base/src'),
-    '@mui/utils': resolveAliasPath('./packages/mui-utils/src'),
-    '@mui/material-next': resolveAliasPath('./packages/mui-material-next/src'),
-    '@mui/joy': resolveAliasPath('./packages/mui-joy/src'),
-  };
+  const muiAliases = getMuiAliases({ type: 'src', isRelative: true, useESIcons: useESModules });
 
   const presets = [
     [
@@ -94,8 +72,8 @@ module.exports = function getBabelConfig(api) {
     plugins.push([
       'babel-plugin-module-resolver',
       {
-        alias: defaultAlias,
         root: ['./'],
+        alias: muiAliases,
       },
     ]);
   }
@@ -121,7 +99,7 @@ module.exports = function getBabelConfig(api) {
             'babel-plugin-module-resolver',
             {
               root: ['./'],
-              alias: defaultAlias,
+              alias: muiAliases,
             },
           ],
         ],
@@ -131,12 +109,8 @@ module.exports = function getBabelConfig(api) {
           [
             'babel-plugin-module-resolver',
             {
-              alias: {
-                ...defaultAlias,
-                modules: './modules',
-                'typescript-to-proptypes': './packages/typescript-to-proptypes/src',
-              },
               root: ['./'],
+              alias: muiAliases,
             },
           ],
         ],
@@ -154,7 +128,7 @@ module.exports = function getBabelConfig(api) {
             'babel-plugin-module-resolver',
             {
               root: ['./'],
-              alias: defaultAlias,
+              alias: muiAliases,
             },
           ],
         ],
@@ -165,7 +139,7 @@ module.exports = function getBabelConfig(api) {
           [
             'babel-plugin-module-resolver',
             {
-              alias: defaultAlias,
+              alias: muiAliases,
             },
           ],
         ],

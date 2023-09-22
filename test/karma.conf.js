@@ -1,6 +1,7 @@
 const path = require('path');
 const playwright = require('playwright');
 const webpack = require('webpack');
+const getMuiAliases = require('../scripts/muiAliases');
 
 const CI = Boolean(process.env.CI);
 // renovate PRs are based off of  upstream branches.
@@ -133,36 +134,22 @@ module.exports = function setKarmaConfig(config) {
               envName: 'stable',
             },
           },
-          // transpile 3rd party packages with dependencies in this repository
+          // Transpile dependencies outside this repository with dependencies in this repository
+          // TODO: Remove when the lab will stop exporting components from `@mui/x-tree-view`
           {
             test: /\.(js|mjs|jsx)$/,
-            include:
-              /node_modules(\/|\\)(notistack|@mui(\/|\\)x-data-grid|@mui(\/|\\)x-data-grid-pro|@mui(\/|\\)x-license-pro|@mui(\/|\\)x-data-grid-generator|@mui(\/|\\)x-date-pickers-pro|@mui(\/|\\)x-date-pickers|@mui(\/|\\)x-tree-view)/,
+            include: /node_modules(\/|\\)@mui(\/|\\)x-tree-view/,
             use: {
               loader: 'babel-loader',
               options: {
-                // We have to apply `babel-plugin-module-resolve` to the files in `@mui/x-date-pickers`.
-                // Otherwise we can't import `@mui/material` from `@mui/x-date-pickers` in `yarn test:karma`.
+                // We have to apply `babel-plugin-module-resolve` to the files in `@mui/x-tree-view`.
+                // Otherwise, we can't import `@mui/material` from `@mui/x-tree-view` in `yarn test:karma`.
                 sourceType: 'unambiguous',
                 plugins: [
                   [
                     'babel-plugin-module-resolver',
                     {
-                      alias: {
-                        // all packages in this monorepo
-                        '@mui/material': './packages/mui-material/src',
-                        '@mui/docs': './packages/mui-docs/src',
-                        '@mui/icons-material': './packages/mui-icons-material/lib',
-                        '@mui/lab': './packages/mui-lab/src',
-                        '@mui/styled-engine': './packages/mui-styled-engine/src',
-                        '@mui/styles': './packages/mui-styles/src',
-                        '@mui/system': './packages/mui-system/src',
-                        '@mui/private-theming': './packages/mui-private-theming/src',
-                        '@mui/utils': './packages/mui-utils/src',
-                        '@mui/base': './packages/mui-base/src',
-                        '@mui/material-next': './packages/mui-material-next/src',
-                        '@mui/joy': './packages/mui-joy/src',
-                      },
+                      alias: getMuiAliases({ type: 'src', isRelative: true }),
                       transformFunctions: ['require'],
                     },
                   ],
