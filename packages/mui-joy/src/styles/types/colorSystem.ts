@@ -83,14 +83,12 @@ export interface PaletteText
   extends OverridableRecord<DefaultPaletteText, PaletteTextOverrides, string> {}
 
 interface DefaultPaletteBackground {
-  body: string;
-  surface: string;
-  popup: string;
+  level0: string;
   level1: string;
   level2: string;
   level3: string;
-  tooltip: string;
-  backdrop: string;
+  level4: string;
+  translucent: string;
 }
 export interface PaletteBackgroundOverrides {}
 export interface PaletteBackground

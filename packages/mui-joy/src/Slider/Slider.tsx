@@ -61,8 +61,8 @@ const sliderColorVariables =
       ...(!data.state && { '--variant-borderWidth': styles['--variant-borderWidth'] ?? '0px' }),
       '--Slider-trackColor': styles.color,
       '--Slider-thumbBackground': styles.color,
-      '--Slider-thumbColor': styles.backgroundColor || theme.vars.palette.background.surface,
-      '--Slider-trackBackground': styles.backgroundColor || theme.vars.palette.background.surface,
+      '--Slider-thumbColor': styles.backgroundColor || theme.vars.palette.background.level1,
+      '--Slider-trackBackground': styles.backgroundColor || theme.vars.palette.background.level1,
       '--Slider-trackBorderColor': styles.borderColor,
       '--Slider-railBackground': theme.vars.palette.background.level2,
     };
@@ -79,6 +79,7 @@ const SliderRoot = styled('span', {
       '--Slider-size': 'max(42px, max(var(--Slider-thumbSize), var(--Slider-trackSize)))', // Reach 42px touch target, about ~8mm on screen.
       '--Slider-trackRadius': 'var(--Slider-size)',
       '--Slider-markBackground': theme.vars.palette.text.tertiary,
+      '--Slider-valueLabelBackground': theme.vars.palette.neutral[600],
       [`& .${sliderClasses.markActive}`]: {
         '--Slider-markBackground': 'var(--Slider-trackColor)',
       },
@@ -329,7 +330,7 @@ const SliderValueLabel = styled('span', {
   transform:
     'translateY(calc((var(--Slider-thumbSize) + var(--Slider-valueLabelArrowSize)) * -1)) scale(0)',
   position: 'absolute',
-  backgroundColor: theme.vars.palette.background.tooltip,
+  backgroundColor: 'var(--Slider-valueLabelBackground)',
   boxShadow: theme.shadow.sm,
   borderRadius: theme.vars.radius.xs,
   color: '#fff',
@@ -337,7 +338,7 @@ const SliderValueLabel = styled('span', {
     display: 'var(--Slider-valueLabelArrowDisplay)',
     position: 'absolute',
     content: '""',
-    color: theme.vars.palette.background.tooltip,
+    color: 'var(--Slider-valueLabelBackground)',
     bottom: 0,
     border: 'calc(var(--Slider-valueLabelArrowSize) / 2) solid',
     borderColor: 'currentColor',

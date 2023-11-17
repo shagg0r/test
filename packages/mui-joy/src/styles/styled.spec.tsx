@@ -3,20 +3,20 @@ import { styled, VariantProp, ColorPaletteProp } from '@mui/joy/styles';
 
 const Basic = styled('button')({
   fontWeight: 'var(--fontSize-md)' as React.CSSProperties['fontWeight'],
-  backgroundColor: 'var(--palette-background-body)',
+  backgroundColor: 'var(--palette-background-level0)',
   lineHeight: 1,
 });
 
 const ObjectStyle = styled('button')(({ theme }) => ({
   fontWeight: theme.vars.fontWeight.md,
-  backgroundColor: theme.vars.palette.background.body,
+  backgroundColor: theme.vars.palette.background.level0,
   ...theme.typography['body-md'],
 }));
 
 const ArrayStyle = styled('button')(({ theme }) => [
   {
     fontWeight: theme.vars.fontWeight.md,
-    backgroundColor: theme.vars.palette.background.body,
+    backgroundColor: theme.vars.palette.background.level0,
   },
   theme.typography['body-md'],
 ]);
@@ -24,7 +24,7 @@ const ArrayStyle = styled('button')(({ theme }) => [
 const FocusStyle = styled('button')(({ theme }) => [
   {
     fontWeight: theme.vars.fontWeight.md,
-    backgroundColor: theme.vars.palette.background.body,
+    backgroundColor: theme.vars.palette.background.level0,
     [theme.focus.selector]: theme.focus.default,
   },
 ]);

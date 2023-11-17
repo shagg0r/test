@@ -137,7 +137,7 @@ const RadioRadio = styled('span', {
       ? [
           {
             ...variantStyle,
-            backgroundColor: variantStyle?.backgroundColor ?? theme.vars.palette.background.surface,
+            backgroundColor: variantStyle?.backgroundColor ?? theme.vars.palette.background.level1,
           },
           {
             '&:hover': {

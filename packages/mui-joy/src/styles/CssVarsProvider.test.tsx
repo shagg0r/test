@@ -288,14 +288,12 @@ describe('[Joy] CssVarsProvider', () => {
       );
       expect(screen.getByTestId('palette-background').textContent).to.equal(
         JSON.stringify({
-          body: 'var(--joy-palette-background-body)',
-          surface: 'var(--joy-palette-background-surface)',
-          popup: 'var(--joy-palette-background-popup)',
+          level0: 'var(--joy-palette-background-level0)',
           level1: 'var(--joy-palette-background-level1)',
           level2: 'var(--joy-palette-background-level2)',
           level3: 'var(--joy-palette-background-level3)',
-          tooltip: 'var(--joy-palette-background-tooltip)',
-          backdrop: 'var(--joy-palette-background-backdrop)',
+          level4: 'var(--joy-palette-background-level4)',
+          translucent: 'var(--joy-palette-background-translucent)',
         }),
       );
       expect(screen.getByTestId('palette-focusVisible').textContent).to.equal(
