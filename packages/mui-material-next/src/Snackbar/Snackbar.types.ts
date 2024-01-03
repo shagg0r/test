@@ -1,11 +1,17 @@
 import * as React from 'react';
 import { SxProps } from '@mui/system';
 import { ClickAwayListenerProps } from '@mui/base/ClickAwayListener';
+// eslint-disable-next-line no-restricted-imports
 import { InternalStandardProps as StandardProps } from '@mui/material';
-import { SnackbarContentProps } from '@mui/material/SnackbarContent';
+// TODO v6: port to material-next
 import { TransitionProps } from '@mui/material/transitions';
 import { Theme } from '../styles';
 import { SnackbarClasses } from './snackbarClasses';
+import { SnackbarContentProps } from '../SnackbarContent/SnackbarContent.types';
+
+export interface SnackbarOwnerState extends SnackbarProps {
+  anchorOrigin: NonNullable<SnackbarProps['anchorOrigin']>;
+}
 
 export interface SnackbarOrigin {
   vertical: 'top' | 'bottom';
@@ -73,10 +79,10 @@ export interface SnackbarProps extends StandardProps<React.HTMLAttributes<HTMLDi
    * The `reason` parameter can optionally be used to control the response to `onClose`,
    * for example ignoring `clickaway`.
    *
-   * @param {React.SyntheticEvent<any> | Event} event The event source of the callback.
+   * @param {React.SyntheticEvent<any> | Event | null} event The event source of the callback.
    * @param {string} reason Can be: `"timeout"` (`autoHideDuration` expired), `"clickaway"`, or `"escapeKeyDown"`.
    */
-  onClose?: (event: React.SyntheticEvent<any> | Event, reason: SnackbarCloseReason) => void;
+  onClose?: (event: React.SyntheticEvent<any> | Event | null, reason: SnackbarCloseReason) => void;
   /**
    * If `true`, the component is shown.
    */
@@ -116,15 +122,3 @@ export interface SnackbarProps extends StandardProps<React.HTMLAttributes<HTMLDi
    */
   TransitionProps?: TransitionProps;
 }
-
-/**
- *
- * Demos:
- *
- * - [Snackbar](https://mui.com/material-ui/react-snackbar/)
- *
- * API:
- *
- * - [Snackbar API](https://mui.com/material-ui/api/snackbar/)
- */
-export default function Snackbar(props: SnackbarProps): JSX.Element;
