@@ -3,43 +3,52 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { chainPropTypes, unstable_capitalize as capitalize } from '@mui/utils';
-import { unstable_composeClasses as composeClasses } from '@mui/base';
-import { alpha } from '@mui/system';
-import ButtonBase from '@mui/material/ButtonBase';
-import styled from '../styles/styled';
-import useThemeProps from '../styles/useThemeProps';
-import iconButtonClasses, { getIconButtonUtilityClass } from './iconButtonClasses';
+import { unstable_composeClasses as composeClasses, useSlotProps } from '@mui/base';
+import { useThemeProps, alpha, shouldForwardProp } from '@mui/system';
+import resolveProps from '@mui/utils/resolveProps';
+import ButtonBase from '../ButtonBase';
+import { styled } from '../styles';
+import { getIconButtonUtilityClass } from './iconButtonClasses';
+import buttonBaseClasses from '../ButtonBase/buttonBaseClasses';
+import { IconButtonOwnerState, IconButtonProps, IconButtonTypeMap } from './IconButton.types';
+import { ButtonGroupButtonContext, ButtonGroupContext } from '../ButtonGroup';
 
-const useUtilityClasses = (ownerState) => {
-  const { classes, disabled, color, edge, size } = ownerState;
+const useUtilityClasses = (ownerState: IconButtonOwnerState) => {
+  const { classes, color, edge, size } = ownerState;
 
   const slots = {
     root: [
       'root',
-      disabled && 'disabled',
-      color !== 'default' && `color${capitalize(color)}`,
+      `color${capitalize(color ?? '')}`,
+      `size${capitalize(size ?? '')}`,
       edge && `edge${capitalize(edge)}`,
-      `size${capitalize(size)}`,
     ],
+    label: ['label'],
   };
 
-  return composeClasses(slots, getIconButtonUtilityClass, classes);
+  const composedClasses = composeClasses(slots, getIconButtonUtilityClass, classes);
+
+  return {
+    ...classes, // forward the focused, disabled, etc. classes to the ButtonBase
+    ...composedClasses,
+  };
 };
 
-const IconButtonRoot = styled(ButtonBase, {
+export const IconButtonRoot = styled(ButtonBase, {
   name: 'MuiIconButton',
   slot: 'Root',
+  shouldForwardProp: (prop) => shouldForwardProp(prop),
   overridesResolver: (props, styles) => {
     const { ownerState } = props;
 
     return [
       styles.root,
-      ownerState.color !== 'default' && styles[`color${capitalize(ownerState.color)}`],
-      ownerState.edge && styles[`edge${capitalize(ownerState.edge)}`],
+      styles[`color${capitalize(ownerState.color)}`],
       styles[`size${capitalize(ownerState.size)}`],
+      ownerState.edge && styles[`edge${capitalize(ownerState.edge)}`],
     ];
   },
-})(
+})<{ ownerState: IconButtonOwnerState }>(
   ({ theme, ownerState }) => ({
     textAlign: 'center',
     flex: '0 0 auto',
@@ -70,7 +79,15 @@ const IconButtonRoot = styled(ButtonBase, {
     }),
   }),
   ({ theme, ownerState }) => {
-    const palette = (theme.vars || theme).palette?.[ownerState.color];
+    const tokens = theme.vars || theme;
+
+    const palette =
+      tokens.palette?.[
+        !ownerState.color || ownerState.color === 'inherit' || ownerState.color === 'default'
+          ? 'primary'
+          : ownerState.color
+      ];
+
     return {
       ...(ownerState.color === 'inherit' && {
         color: 'inherit',
@@ -100,9 +117,9 @@ const IconButtonRoot = styled(ButtonBase, {
         padding: 12,
         fontSize: theme.typography.pxToRem(28),
       }),
-      [`&.${iconButtonClasses.disabled}`]: {
+      [`&.${buttonBaseClasses.disabled}`]: {
         backgroundColor: 'transparent',
-        color: (theme.vars || theme).palette.action.disabled,
+        color: tokens.palette.action.disabled,
       },
     };
   },
@@ -112,49 +129,56 @@ const IconButtonRoot = styled(ButtonBase, {
  * Refer to the [Icons](/material-ui/icons/) section of the documentation
  * regarding the available icon options.
  */
-const IconButton = React.forwardRef(function IconButton(inProps, ref) {
-  const props = useThemeProps({ props: inProps, name: 'MuiIconButton' });
+const IconButton = React.forwardRef(function IconButton<
+  BaseComponentType extends React.ElementType = IconButtonTypeMap['defaultComponent'],
+>(inProps: IconButtonProps<BaseComponentType>, ref: React.ForwardedRef<any>) {
+  const contextProps = React.useContext(ButtonGroupContext);
+  const buttonGroupButtonContextPositionClassName = React.useContext(ButtonGroupButtonContext);
+  const resolvedProps = resolveProps(
+    (contextProps ?? {}) as IconButtonProps<BaseComponentType>,
+    inProps,
+  );
+  const props = useThemeProps({ props: resolvedProps, name: 'MuiIconButton' });
   const {
     edge = false,
     children,
-    className,
+    classes: classesProp,
     color = 'default',
-    disabled = false,
-    disableFocusRipple = false,
     size = 'medium',
     ...other
   } = props;
 
   const ownerState = {
     ...props,
+    classes: classesProp,
     edge,
     color,
-    disabled,
-    disableFocusRipple,
     size,
   };
 
   const classes = useUtilityClasses(ownerState);
 
-  return (
-    <IconButtonRoot
-      className={clsx(classes.root, className)}
-      centerRipple
-      focusRipple={!disableFocusRipple}
-      disabled={disabled}
-      ref={ref}
-      ownerState={ownerState}
-      {...other}
-    >
-      {children}
-    </IconButtonRoot>
-  );
+  const positionClassName = buttonGroupButtonContextPositionClassName ?? '';
+
+  const rootProps = useSlotProps({
+    elementType: IconButtonRoot,
+    externalForwardedProps: other,
+    externalSlotProps: {},
+    additionalProps: {
+      classes,
+      ref,
+    },
+    ownerState,
+    className: clsx(contextProps?.className, positionClassName),
+  });
+
+  return <IconButtonRoot {...rootProps}>{children}</IconButtonRoot>;
 });
 
 IconButton.propTypes /* remove-proptypes */ = {
   // ----------------------------- Warning --------------------------------
   // | These PropTypes are generated from the TypeScript type definitions |
-  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // |     To update them edit TypeScript types and run "yarn proptypes"  |
   // ----------------------------------------------------------------------
   /**
    * The icon to display.
@@ -181,10 +205,6 @@ IconButton.propTypes /* remove-proptypes */ = {
    */
   classes: PropTypes.object,
   /**
-   * @ignore
-   */
-  className: PropTypes.string,
-  /**
    * The color of the component.
    * It supports both default and custom theme colors, which can be added as shown in the
    * [palette customization guide](https://mui.com/material-ui/customization/palette/#custom-colors).
@@ -204,15 +224,14 @@ IconButton.propTypes /* remove-proptypes */ = {
     PropTypes.string,
   ]),
   /**
+   * @ignore
+   */
+  component: PropTypes.elementType,
+  /**
    * If `true`, the component is disabled.
    * @default false
    */
   disabled: PropTypes.bool,
-  /**
-   * If `true`, the  keyboard focus ripple is disabled.
-   * @default false
-   */
-  disableFocusRipple: PropTypes.bool,
   /**
    * If `true`, the ripple effect is disabled.
    *
@@ -221,6 +240,11 @@ IconButton.propTypes /* remove-proptypes */ = {
    * @default false
    */
   disableRipple: PropTypes.bool,
+  /**
+   * If `true`, the touch ripple effect is disabled.
+   * @default false
+   */
+  disableTouchRipple: PropTypes.bool,
   /**
    * If given, uses a negative margin to counteract the padding on one
    * side (this is often helpful for aligning the left or right
@@ -246,6 +270,6 @@ IconButton.propTypes /* remove-proptypes */ = {
     PropTypes.func,
     PropTypes.object,
   ]),
-};
+} as any;
 
 export default IconButton;

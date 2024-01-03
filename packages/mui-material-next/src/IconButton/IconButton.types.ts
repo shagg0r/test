@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SxProps } from '@mui/system';
 import { OverridableStringUnion, OverrideProps } from '@mui/types';
-import { Theme } from '@mui/material';
+import { Theme } from '../styles/Theme.types';
 import { ExtendButtonBase, ExtendButtonBaseTypeMap } from '../ButtonBase/ButtonBase.types';
 import { IconButtonClasses } from './iconButtonClasses';
 
@@ -34,10 +34,10 @@ export interface IconButtonOwnProps {
    */
   disabled?: boolean;
   /**
-   * If `true`, the  keyboard focus ripple is disabled.
+   * If `true`, the touch ripple effect is disabled.
    * @default false
    */
-  disableFocusRipple?: boolean;
+  disableTouchRipple?: boolean;
   /**
    * If given, uses a negative margin to counteract the padding on one
    * side (this is often helpful for aligning the left or right
@@ -58,12 +58,14 @@ export interface IconButtonOwnProps {
   sx?: SxProps<Theme>;
 }
 
+export interface IconButtonOwnerState extends IconButtonProps {}
+
 export type IconButtonTypeMap<
   AdditionalProps = {},
-  RootComponent extends React.ElementType = 'button',
+  DefaultComponent extends React.ElementType = 'button',
 > = ExtendButtonBaseTypeMap<{
   props: AdditionalProps & IconButtonOwnProps;
-  defaultComponent: RootComponent;
+  defaultComponent: DefaultComponent;
 }>;
 
 /**
