@@ -1,3 +1,5 @@
+import { isPlainObject } from './deepmerge';
+
 /**
  * Add keys, values of `defaultProps` that does not exist in `props`
  * @param {object} defaultProps
@@ -11,10 +13,13 @@ export default function resolveProps<
     slots?: Record<string, unknown>;
     slotProps?: Record<string, unknown>;
   } & Record<string, unknown>,
->(defaultProps: T, props: T) {
+>(defaultProps: T, props: T, shallowMergePropNames: Array<string> = []) {
   const output = { ...props };
 
   (Object.keys(defaultProps) as Array<keyof T>).forEach((propName) => {
+    const defaultValue = defaultProps[propName];
+    const currentValue = output[propName];
+
     if (propName.toString().match(/^(components|slots)$/)) {
       output[propName] = {
         ...(defaultProps[propName] as any),
@@ -42,6 +47,11 @@ export default function resolveProps<
       }
     } else if (output[propName] === undefined) {
       output[propName] = defaultProps[propName];
+    } else if (shallowMergePropNames.includes(String(propName))) {
+      output[propName] = {
+        ...(isPlainObject(defaultValue) && defaultValue),
+        ...(isPlainObject(currentValue) && currentValue),
+      } as T[keyof T];
     }
   });
 
