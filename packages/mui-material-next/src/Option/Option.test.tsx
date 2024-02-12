@@ -13,6 +13,12 @@ import Option, { optionClasses as classes } from '@mui/material-next/Option';
 import Menu from '@mui/material-next/Menu';
 import ButtonBase from '@mui/material-next/ButtonBase';
 
+function createAnchor(element = 'div') {
+  const anchor = document.createElement(element);
+  document.body.appendChild(anchor);
+  return anchor;
+}
+
 const dummyGetItemState = () => ({
   disabled: false,
   highlighted: false,
@@ -57,7 +63,7 @@ describe('<Option />', () => {
   const renderWithMenu = (node: React.ReactNode) => {
     function Test() {
       return (
-        <Menu anchorEl={document.createElement('div')} open>
+        <Menu anchorEl={createAnchor()} open>
           {node}
         </Menu>
       );
@@ -184,7 +190,7 @@ describe('<Option />', () => {
 
   it('prop: disableGutters', () => {
     const { rerender } = render(
-      <Menu anchorEl={document.createElement('div')} open>
+      <Menu anchorEl={createAnchor()} open>
         <Option />
       </Menu>,
     );
@@ -193,7 +199,7 @@ describe('<Option />', () => {
     expect(option).to.have.class(classes.gutters);
 
     rerender(
-      <Menu anchorEl={document.createElement('div')} open>
+      <Menu anchorEl={createAnchor()} open>
         <Option disableGutters />
       </Menu>,
     );

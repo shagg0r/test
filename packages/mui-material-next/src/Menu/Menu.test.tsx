@@ -18,11 +18,17 @@ import Popover from '@mui/material/Popover';
 import { extendTheme, CssVarsProvider } from '@mui/material-next/styles';
 import { MenuPaper } from './Menu';
 
+function createAnchor() {
+  const anchor = document.createElement('div');
+  document.body.appendChild(anchor);
+  return anchor;
+}
+
 describe('<Menu />', () => {
   const { render } = createRenderer({ clock: 'fake' });
   const mount = createMount();
 
-  describeConformance(<Menu anchorEl={() => document.createElement('div')} open />, () => ({
+  describeConformance(<Menu anchorEl={() => createAnchor()} open />, () => ({
     classes,
     inheritComponent: Popover,
     render,
@@ -56,7 +62,7 @@ describe('<Menu />', () => {
         const handleEntering = spy();
         render(
           <Menu
-            anchorEl={document.createElement('div')}
+            anchorEl={createAnchor()}
             open
             TransitionProps={{
               onEnter: handleEnter,
@@ -86,7 +92,7 @@ describe('<Menu />', () => {
               onExit: handleExit,
               onExiting: handleExiting,
             }}
-            anchorEl={document.createElement('div')}
+            anchorEl={createAnchor()}
             open
           />,
         );
@@ -104,13 +110,7 @@ describe('<Menu />', () => {
   });
 
   it('should pass `classes.paper` to the Paper', () => {
-    render(
-      <Menu
-        anchorEl={document.createElement('div')}
-        open
-        PaperProps={{ 'data-testid': 'paper' }}
-      />,
-    );
+    render(<Menu anchorEl={createAnchor()} open PaperProps={{ 'data-testid': 'paper' }} />);
 
     expect(screen.getByTestId('paper')).to.have.class(classes.paper);
   });
@@ -119,7 +119,7 @@ describe('<Menu />', () => {
     it('should be able to change the Popover style', () => {
       render(
         <Menu
-          anchorEl={document.createElement('div')}
+          anchorEl={createAnchor()}
           open
           PaperProps={{ 'data-testid': 'paper' }}
           PopoverClasses={{ paper: 'bar' }}
@@ -132,7 +132,7 @@ describe('<Menu />', () => {
     it('should be able to change the Popover root element style when Menu classes prop is also provided', () => {
       render(
         <Menu
-          anchorEl={document.createElement('div')}
+          anchorEl={createAnchor()}
           open
           data-testid="popover"
           classes={{ paper: 'bar' }}
@@ -149,7 +149,7 @@ describe('<Menu />', () => {
       const customClasses = { rounded: 'custom-rounded-class' };
       const wrapper = mount(
         <Menu
-          anchorEl={document.createElement('div')}
+          anchorEl={createAnchor()}
           open
           PaperProps={{
             'data-testid': 'paper',
@@ -166,7 +166,7 @@ describe('<Menu />', () => {
 
   it('should pass onClose prop to Popover', () => {
     const handleClose = spy();
-    render(<Menu anchorEl={document.createElement('div')} open onClose={handleClose} />);
+    render(<Menu anchorEl={createAnchor()} open onClose={handleClose} />);
 
     act(() => {
       screen.getByRole('menu').focus();
@@ -178,7 +178,7 @@ describe('<Menu />', () => {
 
   it('renders its children only when open', () => {
     const { setProps } = render(
-      <Menu anchorEl={document.createElement('div')} open={false}>
+      <Menu anchorEl={createAnchor()} open={false}>
         <div data-testid="children" />
       </Menu>,
     );
@@ -192,7 +192,7 @@ describe('<Menu />', () => {
 
   describe('list node', () => {
     it('should render a menu inside the Popover', () => {
-      render(<Menu anchorEl={document.createElement('div')} open data-testid="popover" />);
+      render(<Menu anchorEl={createAnchor()} open data-testid="popover" />);
 
       expect(screen.getByTestId('popover').querySelector('[role="menu"]')).not.to.equal(null);
     });
@@ -208,7 +208,7 @@ describe('<Menu />', () => {
       );
     }
     render(
-      <Menu anchorEl={document.createElement('div')} open>
+      <Menu anchorEl={createAnchor()} open>
         <MenuItem>one</MenuItem>
       </Menu>,
     );
@@ -218,7 +218,7 @@ describe('<Menu />', () => {
 
   it('should not focus list if autoFocus=false', () => {
     const { setProps } = render(
-      <Menu anchorEl={document.createElement('div')} autoFocus={false} open={false}>
+      <Menu anchorEl={createAnchor()} autoFocus={false} open={false}>
         <div tabIndex={-1} />
       </Menu>,
     );
@@ -232,13 +232,7 @@ describe('<Menu />', () => {
 
   it('should call TransitionProps.onEntering', () => {
     const onEnteringSpy = spy();
-    render(
-      <Menu
-        anchorEl={document.createElement('div')}
-        open
-        TransitionProps={{ onEntering: onEnteringSpy }}
-      />,
-    );
+    render(<Menu anchorEl={createAnchor()} open TransitionProps={{ onEntering: onEnteringSpy }} />);
 
     expect(onEnteringSpy.callCount).to.equal(1);
   });
@@ -247,7 +241,7 @@ describe('<Menu />', () => {
     const onEnteringSpy = spy();
     render(
       <Menu
-        anchorEl={document.createElement('div')}
+        anchorEl={createAnchor()}
         disableAutoFocusItem
         open
         TransitionProps={{ onEntering: onEnteringSpy }}
@@ -276,7 +270,7 @@ describe('<Menu />', () => {
     }
     const onCloseSpy = spy();
     render(
-      <Menu anchorEl={document.createElement('div')} open onClose={onCloseSpy}>
+      <Menu anchorEl={createAnchor()} open onClose={onCloseSpy}>
         <MenuItem>hello</MenuItem>
       </Menu>,
     );
@@ -292,7 +286,7 @@ describe('<Menu />', () => {
 
   it('ignores invalid children', () => {
     render(
-      <Menu anchorEl={document.createElement('div')} open>
+      <Menu anchorEl={createAnchor()} open>
         {null}
         <span role="menuitem">hello</span>
         {/* testing conditional rendering */}
@@ -309,7 +303,7 @@ describe('<Menu />', () => {
     it('warns a Fragment is passed as a child', () => {
       expect(() => {
         render(
-          <Menu anchorEl={document.createElement('div')} open={false}>
+          <Menu anchorEl={createAnchor()} open={false}>
             {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
             <React.Fragment />
           </Menu>,
@@ -346,7 +340,7 @@ describe('<Menu />', () => {
       render(
         <CssVarsProvider theme={theme}>
           <Menu
-            anchorEl={document.createElement('div')}
+            anchorEl={createAnchor()}
             open
             PaperProps={{
               'data-testid': 'paper',
@@ -380,7 +374,7 @@ describe('<Menu />', () => {
       render(
         <CssVarsProvider theme={theme}>
           <Menu
-            anchorEl={document.createElement('div')}
+            anchorEl={createAnchor()}
             open
             PaperProps={{
               'data-testid': 'paper',
@@ -402,7 +396,7 @@ describe('<Menu />', () => {
   describe('paper', () => {
     it('should use MenuPaper component', () => {
       const wrapper = mount(
-        <Menu anchorEl={document.createElement('div')} open>
+        <Menu anchorEl={createAnchor()} open>
           <div />
         </Menu>,
       );
@@ -414,7 +408,7 @@ describe('<Menu />', () => {
   describe('slots', () => {
     it('should merge slots with existing values', () => {
       const wrapper = mount(
-        <Menu slots={{ root: 'span' }} anchorEl={document.createElement('div')} open>
+        <Menu slots={{ root: 'span' }} anchorEl={createAnchor()} open>
           <div />
         </Menu>,
       );
@@ -454,7 +448,7 @@ describe('<Menu />', () => {
           render(
             <ContextMenu
               open
-              anchorEl={document.createElement('div')}
+              anchorEl={createAnchor()}
               TransitionProps={{
                 onEnter: handleEnter,
                 onEntering: handleEntering,
@@ -483,7 +477,7 @@ describe('<Menu />', () => {
                 onExit: handleExit,
                 onExiting: handleExiting,
               }}
-              anchorEl={document.createElement('div')}
+              anchorEl={createAnchor()}
               open
             />,
           );
@@ -502,11 +496,7 @@ describe('<Menu />', () => {
 
     it('should pass `classes.paper` to the Paper', () => {
       render(
-        <ContextMenu
-          anchorEl={document.createElement('div')}
-          open
-          PaperProps={{ 'data-testid': 'paper' }}
-        />,
+        <ContextMenu anchorEl={createAnchor()} open PaperProps={{ 'data-testid': 'paper' }} />,
       );
 
       expect(screen.getByTestId('paper')).to.have.class(classes.paper);
@@ -516,7 +506,7 @@ describe('<Menu />', () => {
       it('should be able to change the Popover style', () => {
         render(
           <ContextMenu
-            anchorEl={document.createElement('div')}
+            anchorEl={createAnchor()}
             open
             PaperProps={{ 'data-testid': 'paper' }}
             PopoverClasses={{ paper: 'bar' }}
@@ -529,7 +519,7 @@ describe('<Menu />', () => {
       it('should be able to change the Popover root element style when Menu classes prop is also provided', () => {
         render(
           <ContextMenu
-            anchorEl={document.createElement('div')}
+            anchorEl={createAnchor()}
             open
             data-testid="popover"
             classes={{ paper: 'bar' }}
@@ -546,7 +536,7 @@ describe('<Menu />', () => {
         const customClasses = { rounded: 'custom-rounded-class' };
         const wrapper = mount(
           <ContextMenu
-            anchorEl={document.createElement('div')}
+            anchorEl={createAnchor()}
             open
             PaperProps={{
               'data-testid': 'paper',
@@ -563,7 +553,7 @@ describe('<Menu />', () => {
 
     it('should pass onClose prop to Popover', () => {
       const handleClose = spy();
-      render(<ContextMenu anchorEl={document.createElement('div')} open onClose={handleClose} />);
+      render(<ContextMenu anchorEl={createAnchor()} open onClose={handleClose} />);
 
       act(() => {
         screen.getByRole('menu').focus();
@@ -575,7 +565,7 @@ describe('<Menu />', () => {
 
     it('renders its children only when open', () => {
       const { getByTestId } = render(
-        <ContextMenu anchorEl={document.createElement('div')} open={false}>
+        <ContextMenu anchorEl={createAnchor()} open={false}>
           <div data-testid="children" />
         </ContextMenu>,
       );
@@ -591,7 +581,7 @@ describe('<Menu />', () => {
 
     describe('list node', () => {
       it('should render a menu inside the Popover', () => {
-        render(<ContextMenu anchorEl={document.createElement('div')} open data-testid="popover" />);
+        render(<ContextMenu anchorEl={createAnchor()} open data-testid="popover" />);
 
         expect(screen.getByTestId('popover').querySelector('[role="menu"]')).not.to.equal(null);
       });
@@ -607,7 +597,7 @@ describe('<Menu />', () => {
         );
       }
       render(
-        <ContextMenu anchorEl={document.createElement('div')} open>
+        <ContextMenu anchorEl={createAnchor()} open>
           <MenuItem>one</MenuItem>
         </ContextMenu>,
       );
@@ -617,7 +607,7 @@ describe('<Menu />', () => {
 
     it('should not focus list if autoFocus=false', () => {
       render(
-        <ContextMenu anchorEl={document.createElement('div')} autoFocus={false} open>
+        <ContextMenu anchorEl={createAnchor()} autoFocus={false} open>
           <div tabIndex={-1} />
         </ContextMenu>,
       );
@@ -629,7 +619,7 @@ describe('<Menu />', () => {
       const onEnteringSpy = spy();
       render(
         <ContextMenu
-          anchorEl={document.createElement('div')}
+          anchorEl={createAnchor()}
           open
           TransitionProps={{ onEntering: onEnteringSpy }}
         />,
@@ -642,7 +632,7 @@ describe('<Menu />', () => {
       const onEnteringSpy = spy();
       render(
         <ContextMenu
-          anchorEl={document.createElement('div')}
+          anchorEl={createAnchor()}
           disableAutoFocusItem
           open
           TransitionProps={{ onEntering: onEnteringSpy }}
@@ -671,7 +661,7 @@ describe('<Menu />', () => {
       }
       const onCloseSpy = spy();
       render(
-        <ContextMenu anchorEl={document.createElement('div')} open onClose={onCloseSpy}>
+        <ContextMenu anchorEl={createAnchor()} open onClose={onCloseSpy}>
           <MenuItem>hello</MenuItem>
         </ContextMenu>,
       );
@@ -687,7 +677,7 @@ describe('<Menu />', () => {
 
     it('ignores invalid children', () => {
       render(
-        <ContextMenu anchorEl={document.createElement('div')} open>
+        <ContextMenu anchorEl={createAnchor()} open>
           {null}
           <span role="menuitem">hello</span>
           {/* testing conditional rendering */}
@@ -721,7 +711,7 @@ describe('<Menu />', () => {
         render(
           <CssVarsProvider theme={theme}>
             <ContextMenu
-              anchorEl={document.createElement('div')}
+              anchorEl={createAnchor()}
               open
               PaperProps={{
                 'data-testid': 'paper',
@@ -755,7 +745,7 @@ describe('<Menu />', () => {
         render(
           <CssVarsProvider theme={theme}>
             <ContextMenu
-              anchorEl={document.createElement('div')}
+              anchorEl={createAnchor()}
               open
               PaperProps={{
                 'data-testid': 'paper',
@@ -777,7 +767,7 @@ describe('<Menu />', () => {
     describe('paper', () => {
       it('should use MenuPaper component', () => {
         const wrapper = mount(
-          <ContextMenu anchorEl={document.createElement('div')} open>
+          <ContextMenu anchorEl={createAnchor()} open>
             <div />
           </ContextMenu>,
         );
@@ -789,7 +779,7 @@ describe('<Menu />', () => {
     describe('slots', () => {
       it('should merge slots with existing values', () => {
         const wrapper = mount(
-          <ContextMenu slots={{ root: 'span' }} anchorEl={document.createElement('div')}>
+          <ContextMenu slots={{ root: 'span' }} anchorEl={createAnchor()}>
             <div />
           </ContextMenu>,
         );

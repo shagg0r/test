@@ -28,6 +28,14 @@ const testContext: DropdownContextValue = {
 describe('Joy <Menu />', () => {
   const { render } = createRenderer({ clock: 'fake' });
 
+  beforeEach(() => {
+    document.body.appendChild(testContext.triggerElement!);
+  });
+
+  afterEach(() => {
+    document.body.removeChild(testContext.triggerElement!);
+  });
+
   describeConformance(<Menu />, () => ({
     classes,
     inheritComponent: PopperUnstyled, // `Unstyled` suffix must exist for parser to recognise that this component inherits Base UI component
@@ -59,6 +67,7 @@ describe('Joy <Menu />', () => {
   }));
 
   const anchorEl = document.createElement('div');
+  document.body.appendChild(anchorEl);
   anchorEl.setAttribute('aria-controls', 'test');
 
   it('should render with `ul` by default', () => {

@@ -14,6 +14,12 @@ import { useTransitionStateManager } from '../useTransition';
 
 const TRANSITION_DURATION = 100;
 
+function createAnchor() {
+  const anchor = document.createElement('div');
+  document.body.appendChild(anchor);
+  return anchor;
+}
+
 function FakeTransition(props: React.PropsWithChildren<{}>) {
   const { children: transitionChildren } = props;
   const { requestedEnter, onExited } = useTransitionStateManager();
@@ -51,7 +57,7 @@ describe('<Popup />', () => {
   }
 
   const defaultProps: PopupProps = {
-    anchor: () => document.createElement('div'),
+    anchor: () => createAnchor(),
     children: <span>Hello World</span>,
     open: true,
   };

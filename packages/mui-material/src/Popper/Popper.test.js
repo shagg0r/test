@@ -11,11 +11,17 @@ import { ThemeProvider, createTheme } from '@mui/system';
 import Grow from '@mui/material/Grow';
 import Popper from '@mui/material/Popper';
 
+function createAnchor() {
+  const anchor = document.createElement('div');
+  document.body.appendChild(anchor);
+  return anchor;
+}
+
 describe('<Popper />', () => {
   let rtlTheme;
   const { clock, render } = createRenderer({ clock: 'fake' });
   const defaultProps = {
-    anchorEl: () => document.createElement('svg'),
+    anchorEl: () => createAnchor(),
     children: <span>Hello World</span>,
     open: true,
   };
@@ -300,6 +306,7 @@ describe('<Popper />', () => {
   describe('default props', () => {
     it('should consume theme default props', () => {
       const container = document.createElement('div');
+      document.body.appendChild(container);
       const theme = createTheme({ components: { MuiPopper: { defaultProps: { container } } } });
       render(
         <ThemeProvider theme={theme}>

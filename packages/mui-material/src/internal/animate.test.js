@@ -1,6 +1,12 @@
 import { expect } from 'chai';
 import animate from './animate';
 
+function createDocumentElement(element = 'div') {
+  const anchor = document.createElement(element);
+  document.body.appendChild(anchor);
+  return anchor;
+}
+
 describe('animate', () => {
   let container;
 
@@ -17,14 +23,14 @@ describe('animate', () => {
       this.skip();
     }
 
-    container = document.createElement('div');
+    container = createDocumentElement();
     container.style.cssText = [
       'height: 100px',
       'width: 100px',
       'overflow: scroll',
       'border: 1px solid #000',
     ].join(';');
-    const box = document.createElement('div');
+    const box = createDocumentElement();
     box.style.cssText = ['height: 100px', 'width: 1000px'].join(';');
     container.appendChild(box);
     document.body.appendChild(container);

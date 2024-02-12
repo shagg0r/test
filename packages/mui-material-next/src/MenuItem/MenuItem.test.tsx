@@ -33,6 +33,12 @@ const testContext = {
   totalSubitemCount: 0,
 };
 
+function createAnchor(element = 'div') {
+  const anchor = document.createElement(element);
+  document.body.appendChild(anchor);
+  return anchor;
+}
+
 describe('<MenuItem />', () => {
   const { render } = createRenderer({ clock: 'fake' });
 
@@ -57,7 +63,7 @@ describe('<MenuItem />', () => {
   const renderWithMenu = (node: React.ReactNode) => {
     function Test() {
       return (
-        <Menu anchorEl={document.createElement('div')} open>
+        <Menu anchorEl={createAnchor()} open>
           {node}
         </Menu>
       );
@@ -186,7 +192,7 @@ describe('<MenuItem />', () => {
 
   it('prop: disableGutters', () => {
     const { rerender } = render(
-      <Menu anchorEl={document.createElement('div')} open>
+      <Menu anchorEl={createAnchor()} open>
         <MenuItem />
       </Menu>,
     );
@@ -195,7 +201,7 @@ describe('<MenuItem />', () => {
     expect(menuitem).to.have.class(classes.gutters);
 
     rerender(
-      <Menu anchorEl={document.createElement('div')} open>
+      <Menu anchorEl={createAnchor()} open>
         <MenuItem disableGutters />
       </Menu>,
     );
