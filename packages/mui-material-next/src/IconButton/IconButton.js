@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { chainPropTypes, unstable_capitalize as capitalize } from '@mui/utils';
 import { unstable_composeClasses as composeClasses } from '@mui/base';
-import { alpha } from '@mui/system';
-import ButtonBase from '@mui/material/ButtonBase';
-import styled from '../styles/styled';
-import useThemeProps from '../styles/useThemeProps';
-import iconButtonClasses, { getIconButtonUtilityClass } from './iconButtonClasses';
+import { useThemeProps, alpha } from '@mui/system';
+import ButtonBase from '../ButtonBase';
+import { styled } from '../styles';
+import buttonBaseClasses from '../ButtonBase/buttonBaseClasses';
+import { getIconButtonUtilityClass } from './iconButtonClasses';
 
 const useUtilityClasses = (ownerState) => {
   const { classes, disabled, color, edge, size } = ownerState;
@@ -100,7 +100,7 @@ const IconButtonRoot = styled(ButtonBase, {
         padding: 12,
         fontSize: theme.typography.pxToRem(28),
       }),
-      [`&.${iconButtonClasses.disabled}`]: {
+      [`&.${buttonBaseClasses.disabled}`]: {
         backgroundColor: 'transparent',
         color: (theme.vars || theme).palette.action.disabled,
       },
@@ -120,7 +120,7 @@ const IconButton = React.forwardRef(function IconButton(inProps, ref) {
     className,
     color = 'default',
     disabled = false,
-    disableFocusRipple = false,
+    disableTouchRipple = false,
     size = 'medium',
     ...other
   } = props;
@@ -129,8 +129,6 @@ const IconButton = React.forwardRef(function IconButton(inProps, ref) {
     ...props,
     edge,
     color,
-    disabled,
-    disableFocusRipple,
     size,
   };
 
@@ -140,7 +138,7 @@ const IconButton = React.forwardRef(function IconButton(inProps, ref) {
     <IconButtonRoot
       className={clsx(classes.root, className)}
       centerRipple
-      focusRipple={!disableFocusRipple}
+      disableTouchRipple={!disableTouchRipple}
       disabled={disabled}
       ref={ref}
       ownerState={ownerState}
@@ -209,11 +207,6 @@ IconButton.propTypes /* remove-proptypes */ = {
    */
   disabled: PropTypes.bool,
   /**
-   * If `true`, the  keyboard focus ripple is disabled.
-   * @default false
-   */
-  disableFocusRipple: PropTypes.bool,
-  /**
    * If `true`, the ripple effect is disabled.
    *
    * ⚠️ Without a ripple there is no styling for :focus-visible by default. Be sure
@@ -221,6 +214,11 @@ IconButton.propTypes /* remove-proptypes */ = {
    * @default false
    */
   disableRipple: PropTypes.bool,
+  /**
+   * If `true`, the touch ripple effect is disabled.
+   * @default false
+   */
+  disableTouchRipple: PropTypes.bool,
   /**
    * If given, uses a negative margin to counteract the padding on one
    * side (this is often helpful for aligning the left or right
