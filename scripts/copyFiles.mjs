@@ -23,9 +23,9 @@ async function addLicense(packageData) {
 `;
   await Promise.all(
     [
-      './index.js',
-      './legacy/index.js',
-      './modern/index.js',
+      './index.mjs',
+      './legacy/index.mjs',
+      './modern/index.mjs',
       './node/index.js',
       './umd/material-ui.development.js',
       './umd/material-ui.production.min.js',
