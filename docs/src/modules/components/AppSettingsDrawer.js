@@ -77,6 +77,7 @@ function AppSettingsDrawer(props) {
       } catch (error) {
         // thrown when cookies are disabled.
       }
+      document.documentElement.setAttribute('data-mui-color-scheme', paletteMode);
       changeTheme({ paletteMode });
     }
   };
