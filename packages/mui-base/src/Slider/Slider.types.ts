@@ -1,4 +1,4 @@
-import { OverridableComponent, OverridableTypeMap, Simplify } from '@mui/types';
+import { Simplify } from '@mui/types';
 import * as React from 'react';
 import { PolymorphicProps, SlotComponentProps, SlotComponentPropsWithSlotState } from '../utils';
 import {
@@ -12,6 +12,7 @@ export type SliderOwnerState = Simplify<
   SliderOwnProps & {
     disabled: boolean;
     focusedThumbIndex: number;
+    activeThumbIndex: number;
     isRtl: boolean;
     max: number;
     min: number;
@@ -167,18 +168,6 @@ export interface SliderTypeMap<
   props: SliderOwnProps & AdditionalProps;
   defaultComponent: RootComponentType;
 }
-
-/**
- * Utility to create component types that inherit props from Slider.
- */
-export interface ExtendSliderTypeMap<M extends OverridableTypeMap> {
-  props: M['props'] & Omit<SliderTypeMap['props'], 'isRtl'>;
-  defaultComponent: M['defaultComponent'];
-}
-
-export type ExtendSlider<M extends OverridableTypeMap> = OverridableComponent<
-  ExtendSliderTypeMap<M>
->;
 
 export type SliderProps<
   RootComponentType extends React.ElementType = SliderTypeMap['defaultComponent'],

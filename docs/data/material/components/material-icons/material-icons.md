@@ -16,11 +16,29 @@ githubLabel: 'package: icons'
 [@mui/icons-material](https://www.npmjs.com/package/@mui/icons-material)
 includes the 2,100+ official [Material Icons](https://fonts.google.com/icons?icon.set=Material+Icons) converted to [`SvgIcon`](/material-ui/api/svg-icon/) components.
 It depends on `@mui/material`, which requires Emotion packages.
-Use the following command to install it:
+Use one of the following commands to install it:
 
-```sh
-npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
+:::info
+The `next` tag is used to download the latest <b>pre-release</b>, v6 version. Remove it to get the current stable version.
+:::
+
+<!-- #default-branch-switch -->
+
+<codeblock storageKey="package-manager">
+
+```bash npm
+npm install @mui/icons-material@next @mui/material@next @emotion/styled @emotion/react
 ```
+
+```bash yarn
+yarn add @mui/icons-material@next @mui/material@next @emotion/styled @emotion/react
+```
+
+```bash pnpm
+pnpm add @mui/icons-material@next @mui/material@next @emotion/styled @emotion/react
+```
+
+</codeblock>
 
 See the [Installation](/material-ui/getting-started/installation/) page for additional docs about how to make sure everything is set up correctly.
 
