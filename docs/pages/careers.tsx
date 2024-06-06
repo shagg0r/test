@@ -158,6 +158,12 @@ const openRolesData = [
           'You will drive the development and maintenance of the documentation platform that powers all MUI products.',
         url: '/careers/react-engineer-docs-infra/',
       },
+      {
+        title: 'React Tech Lead — Core',
+        description:
+          'You will lead the development of MUI Core, positioning the library as the industry standard for design teams while doubling its adoption.',
+        url: '/careers/react-tech-lead-core/',
+      },
     ],
   },
   {
@@ -198,12 +204,6 @@ const nextRolesData = [
         description:
           'You will help form the xCharts team, build ambitious and complex new features, work on strategic problems, and help grow adoption.',
         url: '/careers/react-engineer-x-charts/',
-      },
-      {
-        title: 'React Tech Lead — Core',
-        description:
-          'You will lead the development of MUI Core, positioning the library as the industry standard for design teams while doubling its adoption.',
-        url: '/careers/react-tech-lead-core/',
       },
       {
         title: 'React Community Engineer — X',
