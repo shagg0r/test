@@ -10,6 +10,11 @@ import { getBackdropUtilityClass } from './backdropClasses';
 
 const useThemeProps = createUseThemeProps('MuiBackdrop');
 
+const removeOwnerState = (props) => {
+  const { ownerState, ...rest } = props;
+  return rest;
+};
+
 const useUtilityClasses = (ownerState) => {
   const { classes, invisible } = ownerState;
 
@@ -97,11 +102,9 @@ const Backdrop = React.forwardRef(function Backdrop(inProps, ref) {
     externalForwardedProps,
     ownerState,
   });
-
-  delete transitionProps.ownerState;
-
+  const transitionPropsRemoved = removeOwnerState(transitionProps);
   return (
-    <TransitionSlot in={open} timeout={transitionDuration} {...other} {...transitionProps}>
+    <TransitionSlot in={open} timeout={transitionDuration} {...other} {...transitionPropsRemoved}>
       <RootSlot aria-hidden {...rootProps} classes={classes} ref={ref}>
         {children}
       </RootSlot>
