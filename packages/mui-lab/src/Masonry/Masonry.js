@@ -220,9 +220,9 @@ const Masonry = React.forwardRef(function Masonry(inProps, ref) {
       }
 
       const masonry = masonryRef.current;
-      
+
       // Find the first visible child
-      const masonryFirstVisibleChild = Array.from(masonry.childNodes).find(child => {
+      const masonryFirstVisibleChild = Array.from(masonry.childNodes).find((child) => {
         const childStyle = window.getComputedStyle(child);
         return childStyle.display !== 'none' && childStyle.visibility !== 'hidden';
       });
@@ -260,10 +260,7 @@ const Masonry = React.forwardRef(function Masonry(inProps, ref) {
 
         // Skip if the child is not visible
         const childStyle = window.getComputedStyle(child);
-        if (
-          childStyle.display === 'none' ||
-          childStyle.visibility === 'hidden'
-        ) {
+        if (childStyle.display === 'none' || childStyle.visibility === 'hidden') {
           return;
         }
 
