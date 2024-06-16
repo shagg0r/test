@@ -238,10 +238,6 @@ const Masonry = React.forwardRef(function Masonry(inProps, ref) {
         return;
       }
 
-      if (parentWidth === 0 || firstChildWidth === 0) {
-        return;
-      }
-
       const firstChildComputedStyle = window.getComputedStyle(masonryFirstVisibleChild);
       const firstChildMarginLeft = parseToNumber(firstChildComputedStyle.marginLeft);
       const firstChildMarginRight = parseToNumber(firstChildComputedStyle.marginRight);
