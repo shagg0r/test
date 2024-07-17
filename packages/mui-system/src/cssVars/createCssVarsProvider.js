@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MuiError from '@mui/internal-babel-macros/MuiError.macro';
 import { GlobalStyles } from '@mui/styled-engine';
 import { useTheme as muiUseTheme } from '@mui/private-theming';
+import { deepmerge } from '@mui/utils';
 import ThemeProvider from '../ThemeProvider';
 import InitColorSchemeScript, {
   DEFAULT_ATTRIBUTE,
@@ -87,6 +88,7 @@ export default function createCssVarsProvider(options) {
       cssVarPrefix,
       ...restThemeProp
     } = scopedTheme || themeProp;
+
     const allColorSchemes = Object.keys(colorSchemes);
     const defaultLightColorScheme =
       typeof defaultColorScheme === 'string' ? defaultColorScheme : defaultColorScheme.light;
@@ -163,11 +165,7 @@ export default function createCssVarsProvider(options) {
         // 4.1 Merge the selected color scheme to the theme
         Object.keys(scheme).forEach((schemeKey) => {
           if (scheme[schemeKey] && typeof scheme[schemeKey] === 'object') {
-            // shallow merge the 1st level structure of the theme.
-            theme[schemeKey] = {
-              ...theme[schemeKey],
-              ...scheme[schemeKey],
-            };
+            theme[schemeKey] = deepmerge(theme[schemeKey], scheme[schemeKey]);
           } else {
             theme[schemeKey] = scheme[schemeKey];
           }
@@ -177,6 +175,7 @@ export default function createCssVarsProvider(options) {
         }
       }
     });
+
     const resolvedDefaultColorScheme = (() => {
       if (typeof defaultColorScheme === 'string') {
         return defaultColorScheme;
