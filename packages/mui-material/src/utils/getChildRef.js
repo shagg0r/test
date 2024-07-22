@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 export default function getChildRef(child) {
-
-  if (process.env.NODE_ENV !== 'production' ) {
-    if(!React.isValidElement(child)){
+  if (process.env.NODE_ENV !== 'production') {
+    if (!React.isValidElement(child)) {
       console.error(
         [
           "MUI: getChildRef doesn't accept array as a child.",
