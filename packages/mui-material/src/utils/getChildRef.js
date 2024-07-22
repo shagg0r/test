@@ -1,9 +1,10 @@
+import MuiError from '@mui/internal-babel-macros/MuiError.macro';
 import * as React from 'react';
 
 export default function getChildRef(child) {
   if (process.env.NODE_ENV !== 'production') {
     if (!React.isValidElement(child)) {
-      throw new Error(
+      throw new MuiError(
        'MUI: getChildRef expected to receive a single React element child.'
       );
     }
