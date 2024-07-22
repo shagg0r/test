@@ -3,13 +3,9 @@ import * as React from 'react';
 export default function getChildRef(child) {
   if (process.env.NODE_ENV !== 'production') {
     if (!React.isValidElement(child)) {
-      console.error(
-        [
-          "MUI: getChildRef doesn't accept array as a child.",
-          'Consider providing a single element instead.',
-        ].join('\n'),
+      throw new Error(
+       'MUI: getChildRef expected to receive a single React element child.'
       );
-      return null;
     }
   }
   // 'ref' is passed as prop in React 19, whereas 'ref' is directly attached to children in React 18
