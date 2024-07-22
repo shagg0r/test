@@ -9,7 +9,6 @@ export default function getChildRef(child) {
           'Consider providing a single element instead.',
         ].join('\n'),
       );
-      return null;
     }
   }
   // 'ref' is passed as prop in React 19, whereas 'ref' is directly attached to children in React 18
