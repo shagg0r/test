@@ -46,6 +46,7 @@ const useTouchRipple = (props: UseTouchRippleProps) => {
     rippleAction: keyof TouchRippleActions,
     skipRippleAction = disableTouchRipple,
   ) {
+    // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
     return useEventCallback((event: React.SyntheticEvent) => {
       if (!skipRippleAction && rippleRef.current) {
         rippleRef.current[rippleAction](event);
@@ -88,14 +89,23 @@ const useTouchRipple = (props: UseTouchRippleProps) => {
     }
   });
 
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleBlur = useRippleHandler('stop', false);
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleMouseDown = useRippleHandler('start');
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleContextMenu = useRippleHandler('stop');
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleDragLeave = useRippleHandler('stop');
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleMouseUp = useRippleHandler('stop');
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleMouseLeave = useRippleHandler('stop');
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleTouchStart = useRippleHandler('start');
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleTouchEnd = useRippleHandler('stop');
+  // TODO: uncomment when eslint-plugin-react-compiler //eslint-disable-next-line react-compiler/react-compiler
   const handleTouchMove = useRippleHandler('stop');
 
   const [mountedState, setMountedState] = React.useState(false);
