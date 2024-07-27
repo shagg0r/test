@@ -299,8 +299,9 @@ const ButtonBase = React.forwardRef(function ButtonBase(inProps, ref) {
   }
 
   const handleRef = useForkRef(ref, focusVisibleRef, buttonRef);
+  if (process.env.NODE_ENV !== 'production') {
     React.useEffect(() => {
-      if (process.env.NODE_ENV !== 'production') {
+
         if (enableTouchRipple && !rippleRef.current) {
           console.error(
             [
@@ -309,10 +310,10 @@ const ButtonBase = React.forwardRef(function ButtonBase(inProps, ref) {
             ].join('\n'),
           );
         }
-      }
+
     }, [enableTouchRipple]);
 
-
+  }
   const ownerState = {
     ...props,
     centerRipple,

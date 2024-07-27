@@ -335,6 +335,7 @@ const InputBase = React.forwardRef(function InputBase(inProps, ref) {
   const muiFormControl = useFormControl();
 
   if (process.env.NODE_ENV !== 'production') {
+    // TODO: uncomment when compiler enabled // eslint-disable-next-line react-compiler/react-compiler
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (muiFormControl) {
@@ -446,6 +447,7 @@ const InputBase = React.forwardRef(function InputBase(inProps, ref) {
   // or auto filled by the browser before the hydration (for SSR).
   React.useEffect(() => {
     checkDirty(inputRef.current);
+    // TODO: uncomment when compiler enabled // eslint-disable-next-line react-compiler/react-compiler
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
