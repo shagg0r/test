@@ -35,10 +35,9 @@ const { CssVarsProvider, useColorScheme, getInitColorSchemeScript } = createCssV
   },
 });
 
-let warnedOnce = false;
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function Experimental_CssVarsProvider(props: any) {
+  const [warnedOnce, setWarnedOnce] = React.useState(false)
   if (!warnedOnce) {
     console.warn(
       [
@@ -48,7 +47,7 @@ function Experimental_CssVarsProvider(props: any) {
       ].join('\n'),
     );
 
-    warnedOnce = true;
+    setWarnedOnce(true);
   }
 
   return <CssVarsProvider {...props} />;
