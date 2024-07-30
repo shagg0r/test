@@ -60,7 +60,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
           <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
           Custom theme
         </ToggleButton>
-        <ToggleButton value={false}>Material Design 2</ToggleButton>
+        <ToggleButton data-screenshot="toggle-default-theme" value={false}>
+          Material Design 2
+        </ToggleButton>
       </ToggleButtonGroup>
     </Box>
   );
@@ -74,7 +76,6 @@ ToggleCustomTheme.propTypes = {
 };
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
-
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -87,30 +88,24 @@ function getStepContent(step) {
       throw new Error('Unknown step');
   }
 }
-
 export default function Checkout() {
   const [mode, setMode] = React.useState('light');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const checkoutTheme = createTheme(getCheckoutTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
   const [activeStep, setActiveStep] = React.useState(0);
-
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
-
   const toggleCustomTheme = () => {
     setShowCustomTheme((prev) => !prev);
   };
-
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
-
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-
   return (
     <ThemeProvider theme={showCustomTheme ? checkoutTheme : defaultTheme}>
       <CssBaseline />
@@ -210,7 +205,11 @@ export default function Checkout() {
                 height: 150,
               }}
             >
-              <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+              <ToggleColorMode
+                data-screenshot="toggle-mode"
+                mode={mode}
+                toggleColorMode={toggleColorMode}
+              />
               <Stepper
                 id="desktop-stepper"
                 activeStep={activeStep}
@@ -302,17 +301,21 @@ export default function Checkout() {
               <React.Fragment>
                 {getStepContent(activeStep)}
                 <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column-reverse', sm: 'row' },
-                    justifyContent: activeStep !== 0 ? 'space-between' : 'flex-end',
-                    alignItems: 'end',
-                    flexGrow: 1,
-                    gap: 1,
-                    pb: { xs: 12, sm: 0 },
-                    mt: { xs: 2, sm: 0 },
-                    mb: '60px',
-                  }}
+                  sx={[
+                    {
+                      display: 'flex',
+                      flexDirection: { xs: 'column-reverse', sm: 'row' },
+                      alignItems: 'end',
+                      flexGrow: 1,
+                      gap: 1,
+                      pb: { xs: 12, sm: 0 },
+                      mt: { xs: 2, sm: 0 },
+                      mb: '60px',
+                    },
+                    activeStep !== 0
+                      ? { justifyContent: 'space-between' }
+                      : { justifyContent: 'flex-end' },
+                  ]}
                 >
                   {activeStep !== 0 && (
                     <Button

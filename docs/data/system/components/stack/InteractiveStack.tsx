@@ -11,10 +11,13 @@ import { styled } from '@mui/system';
 import { HighlightedCode } from '@mui/docs/HighlightedCode';
 
 const Item = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#262B32' : '#fff',
+  backgroundColor: '#fff',
   padding: theme.spacing(1),
   textAlign: 'center',
   borderRadius: 4,
+  ...theme.applyStyles('dark', {
+    backgroundColor: '#262B32',
+  }),
 }));
 
 export default function InteractiveStack() {
@@ -49,7 +52,7 @@ export default function InteractiveStack() {
       </Stack>
       <Paper sx={{ p: 2 }}>
         <Grid container spacing={3}>
-          <Grid xs={12}>
+          <Grid size={12}>
             <FormControl component="fieldset">
               <FormLabel component="legend">direction</FormLabel>
               <RadioGroup
@@ -80,7 +83,7 @@ export default function InteractiveStack() {
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid xs={12}>
+          <Grid size={12}>
             <FormControl component="fieldset">
               <FormLabel component="legend">alignItems</FormLabel>
               <RadioGroup
@@ -120,7 +123,7 @@ export default function InteractiveStack() {
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid xs={12}>
+          <Grid size={12}>
             <FormControl component="fieldset">
               <FormLabel component="legend">justifyContent</FormLabel>
               <RadioGroup
@@ -165,7 +168,7 @@ export default function InteractiveStack() {
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid xs={12}>
+          <Grid size={12}>
             <FormControl component="fieldset">
               <FormLabel component="legend">spacing</FormLabel>
               <RadioGroup

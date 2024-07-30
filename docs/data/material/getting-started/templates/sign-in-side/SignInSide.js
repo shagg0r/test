@@ -45,7 +45,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
           <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
           Custom theme
         </ToggleButton>
-        <ToggleButton value={false}>Material Design 2</ToggleButton>
+        <ToggleButton data-screenshot="toggle-default-theme" value={false}>
+          Material Design 2
+        </ToggleButton>
       </ToggleButtonGroup>
     </Box>
   );
@@ -84,12 +86,14 @@ export default function SignInSide() {
           },
           (theme) => ({
             backgroundImage:
-              theme.palette.mode === 'light'
-                ? 'radial-gradient(ellipse at 70% 51%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))'
-                : 'radial-gradient(at 70% 51%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+              'radial-gradient(ellipse at 70% 51%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
             backgroundSize: 'cover',
             height: { xs: 'auto', md: '100dvh' },
             pb: { xs: 12, sm: 0 },
+            ...theme.applyStyles('dark', {
+              backgroundImage:
+                'radial-gradient(at 70% 51%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+            }),
           }),
         ]}
       >
@@ -109,7 +113,11 @@ export default function SignInSide() {
           >
             Back
           </Button>
-          <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+          <ToggleColorMode
+            data-screenshot="toggle-mode"
+            mode={mode}
+            toggleColorMode={toggleColorMode}
+          />
         </Stack>
         <Stack
           direction={{ xs: 'column-reverse', md: 'row' }}

@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
   DEFAULT_MODE_STORAGE_KEY,
   DEFAULT_COLOR_SCHEME_STORAGE_KEY,
-} from './getInitColorSchemeScript';
+} from '../InitColorSchemeScript/InitColorSchemeScript';
 
 export type Mode = 'light' | 'dark' | 'system';
 export type SystemMode = Exclude<Mode, 'system'>;
@@ -13,11 +13,11 @@ export interface State<SupportedColorScheme extends string> {
    * User selected mode.
    * Note: on the server, mode is always undefined
    */
-  mode: Mode | undefined;
+  mode: 'light' | 'dark' | 'system' | undefined;
   /**
    * Only valid if `mode: 'system'`, either 'light' | 'dark'.
    */
-  systemMode: SystemMode | undefined;
+  systemMode: 'light' | 'dark' | undefined;
   /**
    * The color scheme for the light mode.
    */

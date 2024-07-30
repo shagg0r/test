@@ -18,6 +18,7 @@ export {
   css,
   keyframes,
 } from '@mui/system';
+export { unstable_createBreakpoints } from '@mui/system/createBreakpoints';
 // TODO: Remove this function in v6.
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function experimental_sx() {
@@ -31,7 +32,7 @@ export { default as unstable_createMuiStrictModeTheme } from './createMuiStrictM
 export { default as createStyles } from './createStyles';
 export { getUnit as unstable_getUnit, toUnitless as unstable_toUnitless } from './cssUtils';
 export { default as responsiveFontSizes } from './responsiveFontSizes';
-export { duration, easing } from './createTransitions';
+export { default as createTransitions, duration, easing } from './createTransitions';
 export { default as useTheme } from './useTheme';
 export { default as useThemeProps } from './useThemeProps';
 export { default as styled } from './styled';

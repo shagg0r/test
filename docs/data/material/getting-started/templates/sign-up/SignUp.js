@@ -53,7 +53,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
           <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
           Custom theme
         </ToggleButton>
-        <ToggleButton value={false}>Material Design 2</ToggleButton>
+        <ToggleButton data-screenshot="toggle-default-theme" value={false}>
+          Material Design 2
+        </ToggleButton>
       </ToggleButtonGroup>
     </Box>
   );
@@ -74,27 +76,31 @@ const Card = styled(MuiCard)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(2),
   boxShadow:
-    theme.palette.mode === 'light'
-      ? 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px'
-      : 'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px',
+    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px',
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
     width: '450px',
   },
+  ...theme.applyStyles('dark', {
+    boxShadow:
+      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px',
+  }),
 }));
 
 const SignUpContainer = styled(Stack)(({ theme }) => ({
   height: 'auto',
-  padingBottom: theme.spacing(12),
+  paddingBottom: theme.spacing(12),
   backgroundImage:
-    theme.palette.mode === 'light'
-      ? 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))'
-      : 'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.3), hsl(220, 30%, 5%))',
+    'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
   backgroundRepeat: 'no-repeat',
   [theme.breakpoints.up('sm')]: {
     paddingBottom: 0,
     height: '100dvh',
   },
+  ...theme.applyStyles('dark', {
+    backgroundImage:
+      'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.3), hsl(220, 30%, 5%))',
+  }),
 }));
 
 export default function SignUp() {
@@ -185,7 +191,11 @@ export default function SignUp() {
           >
             Back
           </Button>
-          <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+          <ToggleColorMode
+            data-screenshot="toggle-mode"
+            mode={mode}
+            toggleColorMode={toggleColorMode}
+          />
         </Stack>
         <Stack
           sx={{

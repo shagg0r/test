@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import useTimeout from '@mui/utils/useTimeout';
 import elementAcceptingRef from '@mui/utils/elementAcceptingRef';
 import { Transition } from 'react-transition-group';
-import useTheme from '../styles/useTheme';
+import { useTheme } from '../zero-styled';
 import { getTransitionProps, reflow } from '../transitions/utils';
 import useForkRef from '../utils/useForkRef';
+import getChildRef from '../utils/getChildRef';
 
 function getScale(value) {
   return `scale(${value}, ${value ** 2})`;
@@ -61,7 +62,7 @@ const Grow = React.forwardRef(function Grow(props, ref) {
   const theme = useTheme();
 
   const nodeRef = React.useRef(null);
-  const handleRef = useForkRef(nodeRef, children.ref, ref);
+  const handleRef = useForkRef(nodeRef, getChildRef(children), ref);
 
   const normalizedTransitionCallback = (callback) => (maybeIsAppearing) => {
     if (callback) {
