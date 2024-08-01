@@ -38,7 +38,7 @@ const {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function Experimental_CssVarsProvider(props: any) {
-  const [warnedOnce, setWarnedOnce] = React.useState(false)
+  const [warnedOnce, setWarnedOnce] = React.useState(false);
   if (!warnedOnce) {
     console.warn(
       [
