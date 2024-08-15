@@ -322,11 +322,11 @@ describe('ModalManager', () => {
 
     beforeEach(() => {
       container2 = document.createElement('div');
-      container2.id = "container2";
+      container2.id = 'container2';
       document.body.appendChild(container2);
 
       modalRef1 = document.createElement('div');
-      modalRef1.id = "modal1";
+      modalRef1.id = 'modal1';
       container2.appendChild(modalRef1);
 
       modalManager = new ModalManager();
@@ -473,7 +473,7 @@ describe('ModalManager', () => {
       expect(container2.children[0]).not.toBeAriaHidden();
       expect(container2.children[1]).toBeAriaHidden();
 
-      modalManager.add({mount: mainContentSibling, modalRef: modal2}, mainContentSibling);
+      modalManager.add({ mount: mainContentSibling, modalRef: modal2 }, mainContentSibling);
       expect(container2.children[0]).toBeAriaHidden();
       // main content sibling should not be hidden
       expect(container2.children[1]).not.toBeAriaHidden();

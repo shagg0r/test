@@ -64,7 +64,8 @@ function ariaHiddenElements(
   show: boolean,
 ): void {
   let current: Element | null = container;
-  let previousElement: Element = container == mountElement ? currentElement : (mountElement ?? currentElement);
+  let previousElement: Element =
+    container == mountElement ? currentElement : mountElement ?? currentElement;
   const html = ownerDocument(container).body.parentElement;
   const blacklist = [mountElement, ...elementsToExclude];
 

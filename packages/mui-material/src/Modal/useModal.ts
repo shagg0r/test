@@ -90,7 +90,7 @@ function useModal(parameters: UseModalParameters): UseModalReturnValue {
      */
     let resolvedContainer = disablePortal
       ? (mountNodeRef.current ?? modalRef.current)?.parentElement ?? getDoc().body
-      : (getContainer(container) || getDoc().body);
+      : getContainer(container) || getDoc().body;
 
     manager.add(getModal(), resolvedContainer);
 
