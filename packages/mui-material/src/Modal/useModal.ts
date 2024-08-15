@@ -88,7 +88,7 @@ function useModal(parameters: UseModalParameters): UseModalReturnValue {
      * Resolving this could be simplified (mountNodeRef should take priority when it's set)
      * but this will also work because the logic matches {@link Portal}.
      */
-    let resolvedContainer = disablePortal
+    const resolvedContainer = disablePortal
       ? (mountNodeRef.current ?? modalRef.current)?.parentElement ?? getDoc().body
       : getContainer(container) || getDoc().body;
 
