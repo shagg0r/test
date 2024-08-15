@@ -76,7 +76,7 @@ function ariaHiddenElements(
   }
 
   while (!!current && html !== current) {
-    for (let i = 0; i < current.children.length; i + 1) {
+    for (let i = 0; i < current.children.length; i++) {
       const element = current.children[i];
       const isNotExcludedElement = blacklist.indexOf(element) === -1;
       const isNotForbiddenElement = !isAriaHiddenForbiddenOnElement(element);
