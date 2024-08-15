@@ -84,7 +84,8 @@ function useModal(parameters: UseModalParameters): UseModalReturnValue {
   };
 
   const handleOpen = useEventCallback(() => {
-    let resolvedContainer = getContainer(container) ||
+    let resolvedContainer =
+      getContainer(container) ||
       (disablePortal ? mountNodeRef.current ?? modalRef.current : getDoc().body);
 
     // We cannot have the container to be the modal itself
