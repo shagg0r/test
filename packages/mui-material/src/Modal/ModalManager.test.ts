@@ -457,5 +457,58 @@ describe('ModalManager', () => {
       expect(container2.children[1]).toBeAriaHidden();
       expect(container2.children[2]).not.toBeAriaHidden();
     });
+
+    it('top modal should always be accessible from sublevels', () => {
+      // simulates modal shown in body
+      const modal1 = { mount: container2, modalRef: modalRef1 };
+      const mainContentSibling = document.createElement('div');
+      container2.appendChild(mainContentSibling);
+
+      // simulates modal shown in main content with disablePortal
+      const modal2 = document.createElement('div');
+      mainContentSibling.appendChild(modal2);
+
+      modalManager.add(modal1, container2);
+
+      expect(container2.children[0]).not.toBeAriaHidden();
+      expect(container2.children[1]).toBeAriaHidden();
+
+      modalManager.add({mount: mainContentSibling, modalRef: modal2}, mainContentSibling);
+      expect(container2.children[0]).toBeAriaHidden();
+      // main content sibling should not be hidden
+      expect(container2.children[1]).not.toBeAriaHidden();
+      expect(mainContentSibling.children[0]).not.toBeAriaHidden();
+    });
+
+    it('top modal should always be accessible even if even inside other dialog', () => {
+      // simulates modal shown in another modal
+      const modal1 = { mount: container2, modalRef: modalRef1 };
+      const modal2 = { mount: modalRef1, modalRef: document.createElement('div') };
+      modal2.modalRef.id = 'modal2';
+
+      const modal2Sibling = document.createElement('div');
+      modal1.modalRef.appendChild(modal2Sibling);
+
+      const modal1Sibling = document.createElement('div');
+      container2.appendChild(modal1Sibling);
+
+      modalManager.add(modal1, container2);
+
+      expect(container2.children[0]).not.toBeAriaHidden();
+      expect(container2.children[0].children[0]).not.toBeAriaHidden();
+      expect(container2.children[1]).toBeAriaHidden();
+
+      modal1.modalRef.appendChild(modal2.modalRef);
+      modalManager.add(modal2, modal1.modalRef);
+
+      // modal1
+      expect(container2.children[0]).not.toBeAriaHidden();
+      // modal1 sibling
+      expect(container2.children[1]).toBeAriaHidden();
+      // modal2 sibling
+      expect(container2.children[0].children[0]).toBeAriaHidden();
+      // modal2
+      expect(container2.children[0].children[1]).not.toBeAriaHidden();
+    });
   });
 });
