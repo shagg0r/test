@@ -84,15 +84,13 @@ function useModal(parameters: UseModalParameters): UseModalReturnValue {
   };
 
   const handleOpen = useEventCallback(() => {
-    let resolvedContainer =
-      getContainer(container) ||
-      (disablePortal ? mountNodeRef.current ?? modalRef.current : getDoc().body);
-
-    // We cannot have the container to be the modal itself
-    // (because it's not it's own container), get the parent instead
-    if (resolvedContainer?.parentElement === modalRef.current) {
-      resolvedContainer = resolvedContainer.parentElement ?? getDoc().body;
-    }
+    /**
+     * Resolving this could be simplified (mountNodeRef should take priority when it's set)
+     * but this will also work because the logic matches {@link Portal}.
+     */
+    let resolvedContainer = disablePortal
+      ? (mountNodeRef.current ?? modalRef.current)?.parentElement ?? getDoc().body
+      : (getContainer(container) || getDoc().body);
 
     manager.add(getModal(), resolvedContainer);
 

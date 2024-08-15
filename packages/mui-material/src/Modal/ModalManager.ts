@@ -64,7 +64,7 @@ function ariaHiddenElements(
   show: boolean,
 ): void {
   let current: Element | null = container;
-  let previousElement: Element = mountElement ?? currentElement;
+  let previousElement: Element = container == mountElement ? currentElement : (mountElement ?? currentElement);
   const html = ownerDocument(container).body.parentElement;
   const blacklist = [mountElement, ...elementsToExclude];
 
@@ -224,7 +224,15 @@ function getHiddenElements(container: Element) {
 }
 
 interface Modal {
+  /**
+   * The immediate child of the container argument {@link ModalManager.add}.
+   *
+   * If you pass in {@link modalRef} or the container itself it's also handled
+   */
   mount: Element;
+  /**
+   * The modal element itself.
+   */
   modalRef: Element;
 }
 
@@ -252,6 +260,12 @@ export class ModalManager {
     this.containers = [];
   }
 
+  /**
+   *
+   * @param modal
+   * @param container {@link Modal["mount"]}
+   * @returns
+   */
   add(modal: Modal, container: HTMLElement): number {
     let modalIndex = this.modals.indexOf(modal);
     if (modalIndex !== -1) {

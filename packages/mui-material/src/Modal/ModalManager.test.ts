@@ -317,14 +317,16 @@ describe('ModalManager', () => {
   });
 
   describe('container aria-hidden', () => {
-    let modalRef1;
+    let modalRef1: HTMLDivElement;
     let container2: HTMLDivElement;
 
     beforeEach(() => {
       container2 = document.createElement('div');
+      container2.id = "container2";
       document.body.appendChild(container2);
 
       modalRef1 = document.createElement('div');
+      modalRef1.id = "modal1";
       container2.appendChild(modalRef1);
 
       modalManager = new ModalManager();
@@ -386,35 +388,59 @@ describe('ModalManager', () => {
     });
 
     it('should add aria-hidden to previous modals', () => {
-      const modal2 = document.createElement('div');
-      const modal3 = document.createElement('div');
+      const modal2: Modal = { mount: container2, modalRef: document.createElement('div') };
+      modal2.modalRef.id = 'modal2Ref';
+      const modal3: Modal = { mount: container2, modalRef: document.createElement('div') };
+      modal3.modalRef.id = 'modal3Ref';
 
-      container2.appendChild(modal2);
-      container2.appendChild(modal3);
+      container2.appendChild(modal2.modalRef);
+      container2.appendChild(modal3.modalRef);
 
-      modalManager.add({ ...getDummyModal(), modalRef: modal2 }, container2);
+      // ideally mount must be a child of container, and modalRef must be a child of mount.
+      // usually mount is worked out out by Portal:
+      // * if disablePortal is true, mount is modalRef or null (even though types don't allow that).
+      //   it could be the container2 because it is technically the mount (although it doesn't happen in real scenarios).
+      // * if disablePortal is false, mount is the container if set, or document.body.
+
+      // We directly mounted the modalRef to the container2, so
+      // mount is modalRef or the container too (or null, but typing doesn't allow it).
+      modalManager.add(modal2, container2);
+      modalManager.mount(modal2, {});
       // Simulate the main React DOM true.
       expect(container2.children[0]).toBeAriaHidden();
       expect(container2.children[1]).not.toBeAriaHidden();
+      expect(container2.children[2]).toBeAriaHidden();
 
-      modalManager.add({ ...getDummyModal(), modalRef: modal3 }, container2);
+      // Mount can be container2 itself too because it's technically the mount.
+      modalManager.add(modal3, container2);
+      modalManager.mount(modal3, {});
       expect(container2.children[0]).toBeAriaHidden();
       expect(container2.children[1]).toBeAriaHidden();
       expect(container2.children[2]).not.toBeAriaHidden();
     });
 
     it('should remove aria-hidden on siblings', () => {
-      const modal = { ...getDummyModal(), modalRef: container2.children[0] };
+      // Previous implementation was testing sibling state without siblings, wtf
+      const modal = { mount: container2, modalRef: modalRef1 };
+      const sibling1 = document.createElement('div');
+      const sibling2 = document.createElement('div');
+
+      container2.appendChild(sibling1);
+      container2.appendChild(sibling2);
 
       modalManager.add(modal, container2);
       modalManager.mount(modal, {});
       expect(container2.children[0]).not.toBeAriaHidden();
+      expect(container2.children[1]).toBeAriaHidden();
+      expect(container2.children[2]).toBeAriaHidden();
       modalManager.remove(modal);
       expect(container2.children[0]).toBeAriaHidden();
+      expect(container2.children[1]).not.toBeAriaHidden();
+      expect(container2.children[2]).not.toBeAriaHidden();
     });
 
     it('should keep previous aria-hidden siblings hidden', () => {
-      const modal = { ...getDummyModal(), modalRef: container2.children[0] };
+      const modal = { mount: container2, modalRef: modalRef1 };
       const sibling1 = document.createElement('div');
       const sibling2 = document.createElement('div');
 
