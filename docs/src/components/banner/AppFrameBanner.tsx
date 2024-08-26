@@ -16,7 +16,7 @@ export default function AppFrameBanner() {
   if (pageContext.productId !== 'material-ui' && pageContext.productId !== 'system') {
     return null;
   }
-  const message = `🎉 ${productName} v6 is out! Head to the migration guide to get started.`;
+  const message = `🎉 ${productName} v6 is out now! Head to the upgrading guide to get started.`;
 
   if (process.env.NODE_ENV !== 'production') {
     if (message.length > 100) {
@@ -28,7 +28,7 @@ export default function AppFrameBanner() {
 
   return (
     <Link
-      href="https://mui.com/material-ui/migration/migrating-to-v6/"
+      href="https://mui.com/material-ui/migration/upgrade-to-v6/"
       target="_blank"
       variant="caption"
       sx={[
