@@ -3,7 +3,15 @@ import glob from 'fast-glob';
 import path from 'path';
 import { promisify } from 'util';
 import yargs from 'yargs';
+import * as url from 'url';
+import { rollup } from 'rollup';
+import { babel as rollupBabel } from '@rollup/plugin-babel';
+import rollupResolve from '@rollup/plugin-node-resolve';
+import rollupPreserveDirectives from 'rollup-plugin-preserve-directives';
+import rollupAlias from '@rollup/plugin-alias';
 import { getVersionEnvVariables, getWorkspaceRoot } from './utils.mjs';
+
+const usePackageExports = process.env.MUI_USE_PACKAGE_EXPORTS === 'true';
 
 const exec = promisify(childProcess.exec);
 
@@ -17,7 +25,7 @@ const validBundles = [
 ];
 
 async function run(argv) {
-  const { bundle, largeFiles, outDir: relativeOutDir, verbose } = argv;
+  const { bundle, largeFiles, outDir: outDirBase, verbose } = argv;
 
   if (validBundles.indexOf(bundle) === -1) {
     throw new TypeError(
@@ -42,17 +50,32 @@ async function run(argv) {
     '**/*.spec.ts',
     '**/*.spec.tsx',
     '**/*.d.ts',
+    '**/*.test/*.*',
+    '**/test-cases/*.*',
   ];
 
-  const topLevelNonIndexFiles = glob
-    .sync(`*{${extensions.join(',')}}`, { cwd: srcDir, ignore })
-    .filter((file) => {
-      return path.basename(file, path.extname(file)) !== 'index';
-    });
-  const topLevelPathImportsCanBePackages = topLevelNonIndexFiles.length === 0;
+  // We generally support top level path imports e.g.
+  // 1. `import ArrowDownIcon from '@mui/icons-material/ArrowDown'`.
+  // 2. `import Typography from '@mui/material/Typography'`.
+  // The first case resolves to a file while the second case resolves to a package first i.e. a package.json
+  // This means that only in the second case the bundler can decide whether it uses ES modules or CommonJS modules.
+  // Different extensions are not viable yet since they require additional bundler config for users and additional transpilation steps in our repo.
+  //
+  // TODO v6: Switch to `exports` field.
+  let relativeOutDir = {
+    node: './',
+    modern: './modern',
+    stable: './',
+  }[bundle];
 
-  const outDir = path.resolve(
-    relativeOutDir,
+  if (!usePackageExports) {
+    const topLevelNonIndexFiles = glob
+      .sync(`*{${extensions.join(',')}}`, { cwd: srcDir, ignore })
+      .filter((file) => {
+        return path.basename(file, path.extname(file)) !== 'index';
+      });
+    const topLevelPathImportsCanBePackages = topLevelNonIndexFiles.length === 0;
+
     // We generally support top level path imports e.g.
     // 1. `import ArrowDownIcon from '@mui/icons-material/ArrowDown'`.
     // 2. `import Typography from '@mui/material/Typography'`.
@@ -61,12 +84,69 @@ async function run(argv) {
     // Different extensions are not viable yet since they require additional bundler config for users and additional transpilation steps in our repo.
     //
     // TODO v6: Switch to `exports` field.
-    {
+    relativeOutDir = {
       node: topLevelPathImportsCanBePackages ? './node' : './',
       modern: './modern',
       stable: topLevelPathImportsCanBePackages ? './' : './esm',
-    }[bundle],
-  );
+    }[bundle];
+  }
+
+  const outDir = path.resolve(outDirBase, relativeOutDir);
+
+  if (argv.rollup) {
+    const { default: pkg } = await import(path.resolve('./package.json'), {
+      with: { type: 'json' },
+    });
+
+    const entryFiles = await glob(`**/*{${extensions.join(',')}}`, { cwd: srcDir, ignore });
+
+    const entries = Object.fromEntries(
+      entryFiles.map((file) => [
+        // nested/foo.js becomes nested/foo
+        file.slice(0, file.length - path.extname(file).length),
+        // This expands the relative paths to absolute paths, so e.g.
+        // src/nested/foo becomes /project/src/nested/foo.js
+        url.fileURLToPath(new URL(file, `${url.pathToFileURL(srcDir)}/`)),
+      ]),
+    );
+
+    const rollupBundle = await rollup({
+      input: entries,
+      external: (id) => /node_modules/.test(id),
+      onwarn(warning, warn) {
+        if (warning.code !== 'MODULE_LEVEL_DIRECTIVE') {
+          warn(warning);
+        }
+      },
+      plugins: [
+        rollupAlias({
+          // Mostly o resolve @mui/utils/formatMuiErrorMessage correctly, but generalizes to all packages.
+          entries: [{ find: pkg.name, replacement: srcDir }],
+        }),
+        rollupResolve({ extensions }),
+        rollupBabel({
+          configFile: babelConfigPath,
+          extensions,
+          babelHelpers: 'runtime',
+          envName: bundle,
+        }),
+        rollupPreserveDirectives(),
+      ],
+    });
+
+    const outputExtension = bundle === 'node' ? '.js' : '.mjs';
+
+    await rollupBundle.write({
+      preserveModules: true,
+      interop: 'auto',
+      exports: 'named',
+      dir: outDir,
+      format: bundle === 'node' ? 'commonjs' : 'es',
+      entryFileNames: `[name]${outputExtension}`,
+    });
+
+    return;
+  }
 
   const babelArgs = [
     '--config-file',
@@ -80,6 +160,11 @@ async function run(argv) {
     // Need to put these patterns in quotes otherwise they might be evaluated by the used terminal.
     `"${ignore.join('","')}"`,
   ];
+
+  if (usePackageExports && bundle === 'stable') {
+    babelArgs.push('--out-file-extension', '.mjs');
+  }
+
   if (largeFiles) {
     babelArgs.push('--compact false');
   }
@@ -118,6 +203,11 @@ yargs(process.argv.slice(2))
           describe: 'Set to `true` if you know you are transpiling large files.',
         })
         .option('out-dir', { default: './build', type: 'string' })
+        .option('rollup', {
+          default: false,
+          type: 'boolean',
+          describe: '(Experiment) Use rollup to build the files.',
+        })
         .option('verbose', { type: 'boolean' });
     },
     handler: run,

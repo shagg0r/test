@@ -39,6 +39,7 @@
     "typescript:module-augmentation": "node scripts/testModuleAugmentation.js"
   },
   "dependencies": {
+    "@babel/runtime": "^7.25.0",
     "@mui/system": "workspace:*",
     "@pigment-css/react": "0.0.20"
   },
@@ -59,6 +60,19 @@
       "globalCss": "@pigment-css/react/exports/globalCss",
       "useTheme": "@pigment-css/react/exports/useTheme"
     }
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./*": {
+      "types": "./*/index.d.ts",
+      "import": "./*/index.mjs",
+      "require": "./*/index.js"
+    },
+    "./styles.css": "./styles.css"
   },
   "engines": {
     "node": ">=14.0.0"
