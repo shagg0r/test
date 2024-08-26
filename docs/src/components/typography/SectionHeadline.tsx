@@ -62,7 +62,7 @@ export default function SectionHeadline(props: SectionHeadlineProps) {
       ) : (
         React.cloneElement(title, {
           style: {
-            maxWidth: 500,
+            maxWidth: '500',
             ...(alwaysCenter && {
               maxWidth: '100%',
               textAlign: 'center',

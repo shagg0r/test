@@ -41,7 +41,7 @@ export interface ConformanceOptions {
   refInstanceof: any;
   after?: () => void;
   inheritComponent?: React.ElementType;
-  render: (node: React.ReactElement<any>) => MuiRenderResult | Promise<MuiRenderResult>;
+  render: (node: React.ReactElement<unknown>) => MuiRenderResult | Promise<MuiRenderResult>;
   only?: Array<keyof typeof fullSuite>;
   skip?: Array<keyof typeof fullSuite | 'classesRoot'>;
   testComponentsRootPropWith?: string;
@@ -91,7 +91,7 @@ function throwMissingPropError(field: string): never {
  * the root component.
  */
 export function testClassName(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<HTMLElement & { 'data-testid'?: string }>,
   getOptions: () => ConformanceOptions,
 ) {
   it('applies the className to the root component', async () => {
@@ -117,7 +117,12 @@ export function testClassName(
  * Component from @inheritComponent
  */
 export function testComponentProp(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<
+    HTMLElement & {
+      component?: string | ((props: {}) => React.ReactElement);
+      'data-testid'?: string;
+    }
+  >,
   getOptions: () => ConformanceOptions,
 ) {
   describe('prop: component', () => {
@@ -153,7 +158,12 @@ export function testComponentProp(
  * MUI components spread additional props to its root.
  */
 export function testPropsSpread(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<
+    HTMLElement & {
+      'data-testid'?: string;
+      'data-test-props-spread'?: string;
+    }
+  >,
   getOptions: () => ConformanceOptions,
 ) {
   it(`spreads props to the root component`, async () => {
@@ -183,7 +193,7 @@ export function testPropsSpread(
  * components that forward their ref and attach it to a host component.
  */
 export function describeRef(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<HTMLElement & { ref?: React.Ref<any> }>,
   getOptions: () => ConformanceOptions,
 ) {
   describe('ref', () => {
@@ -208,7 +218,7 @@ export function describeRef(
  * Tests that the root component has the root class
  */
 export function testRootClass(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<HTMLElement & { classes?: Record<string, string> }>,
   getOptions: () => ConformanceOptions,
 ) {
   it('applies the root class to the root component if it has this class', async () => {
@@ -260,7 +270,18 @@ function forEachSlot(
   });
 }
 
-function testSlotsProp(element: React.ReactElement<any>, getOptions: () => ConformanceOptions) {
+function testSlotsProp(
+  element: React.ReactElement<
+    HTMLElement &
+      Partial<{
+        slots: Record<string, any>;
+        slotProps: Record<string, any>;
+        components: Record<string, any>;
+        componentsProps: Record<string, any>;
+      }>
+  >,
+  getOptions: () => ConformanceOptions,
+) {
   const { render, slots, testLegacyComponentsProp } = getOptions();
 
   const CustomComponent = React.forwardRef<
@@ -431,7 +452,12 @@ function testSlotsProp(element: React.ReactElement<any>, getOptions: () => Confo
   });
 }
 
-function testSlotPropsProp(element: React.ReactElement<any>, getOptions: () => ConformanceOptions) {
+function testSlotPropsProp(
+  element: React.ReactElement<
+    HTMLElement & { slotProps?: Record<string, any>; componentsProps?: Record<string, any> }
+  >,
+  getOptions: () => ConformanceOptions,
+) {
   const { render, slots, testLegacyComponentsProp } = getOptions();
 
   if (!render) {
@@ -515,7 +541,7 @@ function testSlotPropsProp(element: React.ReactElement<any>, getOptions: () => C
 }
 
 function testSlotPropsCallback(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<HTMLElement & { slotProps?: Record<string, any> }>,
   getOptions: () => ConformanceOptions,
 ) {
   const { render, slots } = getOptions();
@@ -546,7 +572,9 @@ function testSlotPropsCallback(
  * Components from @inheritComponent
  */
 function testComponentsProp(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<
+    HTMLElement & { components?: Record<string, any>; 'data-testid'?: string }
+  >,
   getOptions: () => ConformanceOptions,
 ) {
   describe('prop components:', () => {
@@ -572,7 +600,7 @@ function testComponentsProp(
  * Components from @inheritComponent
  */
 function testThemeDefaultProps(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<unknown>,
   getOptions: () => ConformanceOptions,
 ) {
   describe('theme default components:', () => {
@@ -618,7 +646,7 @@ function testThemeDefaultProps(
  * Components from @inheritComponent
  */
 function testThemeStyleOverrides(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<unknown>,
   getOptions: () => ConformanceOptions,
 ) {
   describe('theme style overrides:', () => {
@@ -864,7 +892,10 @@ function testThemeStyleOverrides(
  * MUI theme has a components section that allows specifying custom variants.
  * Components from @inheritComponent
  */
-function testThemeVariants(element: React.ReactElement<any>, getOptions: () => ConformanceOptions) {
+function testThemeVariants(
+  element: React.ReactElement<HTMLElement & { 'data-testid'?: string; variant?: string }>,
+  getOptions: () => ConformanceOptions,
+) {
   describe('theme variants:', () => {
     it("respect theme's variants", async function test() {
       if (/jsdom/.test(window.navigator.userAgent)) {
@@ -970,7 +1001,7 @@ function testThemeVariants(element: React.ReactElement<any>, getOptions: () => C
  * The components that iterate over the palette via `variants` should be able to render with or without applying the custom palette styles.
  */
 function testThemeCustomPalette(
-  element: React.ReactElement<any>,
+  element: React.ReactElement<HTMLElement>,
   getOptions: () => ConformanceOptions,
 ) {
   describe('theme extended palette:', () => {
@@ -1015,7 +1046,7 @@ const fullSuite = {
  * components.
  */
 function describeConformance(
-  minimalElement: React.ReactElement<any>,
+  minimalElement: React.ReactElement<HTMLElement & { 'data-testid'?: string }>,
   getOptions: () => ConformanceOptions,
 ) {
   let originalMatchmedia: typeof window.matchMedia;
