@@ -13,7 +13,7 @@
     "@babel/traverse": "^7.25.3",
     "@mui/internal-docs-utils": "workspace:^",
     "@mui/internal-markdown": "workspace:^",
-    "ast-types": "^0.14.2",
+    "ast-types": "^0.16.0",
     "doctrine": "^3.0.0",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
